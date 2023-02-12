@@ -4,19 +4,19 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 
 ## Columns for data set 
-  * `___IID___`:                    individual ID
-  * `___FID___`:                    family ID     (For unralted individuals, create a columns of the same number as "FID", e.g. a column of "1")
-  * `___pre_fev1___`:               FEV1           
-  * `___SNPs___`:                   SNP information, column name MUST starts with lower case "rs", e.g. rs507211
-  * `___timefactor_spiro___`:       time since baseline exam
-  * `___age___`:                    time-varying age
-  * `___smoking_status___`:         Time-varying smoking status - never, former, current  (also used as grouping variable for glmmkin)
+  * __`IID`__:                    individual ID
+  * __`FID`__:                    family ID     (For unralted individuals, create a columns of the same number as "FID", e.g. a column of "1")
+  * __`pre_fev1`__:               FEV1           
+  * __`SNPs`__:                   SNP information, column name MUST starts with lower case "rs", e.g. rs507211
+  * __`timefactor_spiro`__:       time since baseline exam
+  * __`age`__:                    time-varying age
+  * __`smoking_status`__:         Time-varying smoking status - never, former, current  (also used as grouping variable for glmmkin)
 
 ### Baseline 
-  * `___age_baseline___`:           baseline age
-  * `___ht_baseline___`:            baseline height (in cm)
-  * `___smoking_packyears_base___`: pack-years at baseline
-  * `___sex___`:                    biological sex
+  * __`age_baseline`___:           baseline age
+  * ___`ht_baseline`___:            baseline height (in cm)
+  * ___`smoking_packyears_base`___: pack-years at baseline
+  * ___`sex`___:                    biological sex
  
 ### Other cohort-specific variables
   * race
