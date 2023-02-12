@@ -18,13 +18,13 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
   * smoking_packyears_base: pack-years at baseline
   * sex:                    biological sex
  
-### other cohort-specific variables.
+### Other cohort-specific variables.
   * race
   * PCs 
   * equipchange ......
 
 
-### kinship matrix (for related data):   both row names and column names MUST be IID      
+### Kinship matrix (for related data):   both row names and column names MUST be IID      
       
 
 
@@ -32,7 +32,7 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 ## R version: R/4.0.2
 
-## required package
+## Required package
   * geepack
   * GMMAT
   * dplyr
@@ -44,4 +44,4 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 
 
-## For analysis, use "Analysis_MAIN.R"
+## For analysis, use **"Analysis_MAIN.R"**
