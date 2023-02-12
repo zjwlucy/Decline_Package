@@ -21,10 +21,10 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 ### Other cohort-specific variables.
   * race
   * PCs 
-  * equipchange ......
+  * equipchange ......  
 
 
-### Kinship matrix (for related data):   both row names and column names MUST be IID      
+  * Kinship matrix (for related data):   both row names and column names MUST be IID      
       
 
 
