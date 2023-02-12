@@ -4,19 +4,19 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 
 ## Columns for data set 
-  * IID:                    individual ID
-  * FID:                    family ID     (For unralted individuals, create a columns of the same number as "FID", e.g. a column of "1")
-  * pre_fev1:               FEV1           
-  * SNPs:                   SNP information, column name MUST starts with lower case "rs", e.g. rs507211
-  * timefactor_spiro:       time since baseline exam
-  * age:                    time-varying age
-  * smoking_status:         Time-varying smoking status - never, former, current  (also used as grouping variable for glmmkin)
+  * __IID__:                    individual ID
+  * __FID__:                    family ID     (For unralted individuals, create a columns of the same number as "FID", e.g. a column of "1")
+  * __pre_fev1__:               FEV1           
+  * __SNPs__:                   SNP information, column name MUST starts with lower case "rs", e.g. rs507211
+  * __timefactor_spiro__:       time since baseline exam
+  * __age__:                    time-varying age
+  * __smoking_status__:         Time-varying smoking status - never, former, current  (also used as grouping variable for glmmkin)
 
 ### Baseline 
-  * age_baseline:           baseline age
-  * ht_baseline:            baseline height (in cm)
-  * smoking_packyears_base: pack-years at baseline
-  * sex:                    biological sex
+  * __age_baseline__:           baseline age
+  * __ht_baseline__:            baseline height (in cm)
+  * __smoking_packyears_base__: pack-years at baseline
+  * __sex__:                    biological sex
  
 ### Other cohort-specific variables
   * race
@@ -30,7 +30,7 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 
 
-### R version: R/4.0.2
+## R version: R/4.0.2
 
 ### Required package
   * geepack
