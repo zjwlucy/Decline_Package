@@ -32,7 +32,7 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 ## R version: R/4.0.2
 
-## Required package
+### Required package
   * geepack
   * GMMAT
   * dplyr
@@ -44,4 +44,4 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 
 
-## For analysis, use **"Analysis_MAIN.R"**
+## For analysis, use "Analysis_MAIN.R"
