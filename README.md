@@ -18,7 +18,7 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
   * smoking_packyears_base: pack-years at baseline
   * sex:                    biological sex
  
-### Other cohort-specific variables.
+### Other cohort-specific variables
   * race
   * PCs 
   * equipchange ......  
@@ -30,7 +30,7 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 
 
-## R version: R/4.0.2
+### R version: R/4.0.2
 
 ### Required package
   * geepack
