@@ -13,10 +13,10 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
   * __`smoking_status`__:         Time-varying smoking status - never, former, current  (also used as grouping variable for glmmkin)
 
 ### Baseline 
-  * __`age_baseline`___:           baseline age
-  * ___`ht_baseline`___:            baseline height (in cm)
-  * ___`smoking_packyears_base`___: pack-years at baseline
-  * ___`sex`___:                    biological sex
+  * __`age_baseline`__:           baseline age
+  * __`ht_baseline`__:            baseline height (in cm)
+  * __`smoking_packyears_base`__: pack-years at baseline
+  * __`sex`__:                    biological sex
  
 ### Other cohort-specific variables
   * race
