@@ -90,36 +90,39 @@
 ##############################################################  
 #                  2. fit models separately                  #
 ##############################################################
-
-
 ## -----------------------------------------------------------
+## For exploration
 ## example code: SNP rs507211
 
 
 ## LME
 ## fit ALL lme models for one SNP:
-   fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat,          covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat)
+   out_gmmat1 <- fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat,          covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat)
    
 ## fit model 3 and model 6 (LME) for one SNP:   
-   fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat[c(3,6),], covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat) 
+   out_gmmat2 <- fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat[c(3,6),], covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat) 
 
 ## show coefficients for ALL variables
-   fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat,          covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat, all_results=TRUE)
+   out_gmmat3 <- fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat,          covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat, all_results=TRUE)
 
+   out_gmmat1
+   out_gmmat2
+   out_gmmat3
 
 
 ## GEE
 ## fit ALL GEE models for one SNP
-   fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee,           covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
+   out_gee1 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee,           covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
 
 ## fit model 1 and 3 for one SNP
-   fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee[c(1,3), ], covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
+   out_gee2 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee[c(1,3), ], covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
 
 ## show coefficients for ALL variables
-   fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee,           covars_additional=covars_for_eq, snpi="rs507211", related=data_related, all_results=TRUE)
+   out_gee3 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee,           covars_additional=covars_for_eq, snpi="rs507211", related=data_related, all_results=TRUE)
 
-
-
+   out_gee1
+   out_gee2
+   out_gee3
 
 
 
@@ -127,6 +130,7 @@
 #                       3. fit ALL models                    #
 ##############################################################
 ## -----------------------------------------------------------
+## Make sure to run Section 1 before running the code below
 
 ## Note: fitting ALL models for ALL SNPs may take a long time
    source("f_fit.R")
@@ -140,9 +144,5 @@
 ## fit ALL models for ALL SNPs and save the output to the excel file "summary_2023.xlsx"
    output <- f_fit(saveOutput=TRUE)
    
-
-
-
-
 
 
