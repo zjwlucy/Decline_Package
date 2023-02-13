@@ -51,6 +51,14 @@
   data_related   <-             # For GEE, dataset with related individuals or not?  (TRUE/FALSE)     
 
 
+## example:
+   d    <- read.csv("FHS_data.csv", quote="", na.strings="")  
+   kmat <- read.csv("FHS_kinship.csv")
+   
+   covars_cohort  <-  c("PC1", "PC2", "equipchange")
+   data_multiRace <-  FALSE          
+   data_related   <-  TRUE          
+
 ############################################################## 
 
 
