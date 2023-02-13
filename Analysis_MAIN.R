@@ -95,7 +95,8 @@
 ## fit model 3 and model 6 (LME) for one SNP:   
    fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat[c(3,6),], covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat) 
 
-
+## show coefficients for ALL variables
+   fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat,          covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat, all_results=TRUE)
 
 
 
@@ -105,6 +106,9 @@
 
 ## fit model 1 and 3 for one SNP
    fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee[c(1,3), ], covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
+
+## show coefficients for ALL variables
+   fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee,           covars_additional=covars_for_eq, snpi="rs507211", related=data_related, all_results=TRUE)
 
 
 
