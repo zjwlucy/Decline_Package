@@ -52,14 +52,13 @@
           all_gee <- rbind(all_gee, tmp_gee)      
       }
     
-    
+      all_models <- list(gmmat=all_gmmat, gee=all_gee) 
       if(saveOutput){
          write.xlsx(all_gmmat, file = "summary_2023.xlsx", sheetName = "GMMAT", append = TRUE, showNA = F, row.names = F)    
-         write.xlsx(all_gee,   file = "summary_2023.xlsx", sheetName = "GEE",   append = TRUE, showNA = F, row.names = F)                           
+         write.xlsx(all_gee,   file = "summary_2023.xlsx", sheetName = "GEE",   append = TRUE, showNA = F, row.names = F)
+         save(all_models, file = "summary_2023.rdata")                           
       }
       
-     all_models <- list(gmmat=all_gmmat, gee=all_gee) 
      return(all_models) 
      }
-
 
