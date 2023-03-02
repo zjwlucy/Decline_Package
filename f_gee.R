@@ -67,17 +67,25 @@
            tryCatch({      
                modeltypei <- eqlist$modeltype[i]
                modeli     <- eqlist$model[i]
-               eqi        <- eqlist$Fixed[i]
+               covarsi    <- eqlist$Fixed[i]
                outcomei   <- ifelse(eqlist$variable[i] == "snp_s", "fev1_s", "pre_fev1")
+               print("=========================================================================")
                print( paste0("Fitting ", modeltypei, " model ", modeli) )
                
-             # construct formula for specified SNP
-               eqi     <- gsub("snp", snpi, eqi) 
-               eqi     <- unlist(strsplit(eqi, split = ", "))
-               covarsi <- paste(c(eqi, covars_additional),  collapse=" + ")
+             # construct formula for specified SNP or variable
+               if(eqlist$variable[i] == "snp_s"  &  !grepl("^rs", snpi) ){
+                    covarsi <- gsub("snp_s", snpi, covarsi)     # for non-SNP variables
+               }else{
+                    covarsi <- gsub("snp", snpi, covarsi)       # for SNPs 
+               }
+               covarsi <- gsub("timefactor_spirosq", "timeCenteredSq", covarsi) 
+               covarsi <- c(unlist(strsplit(covarsi, split = ", ")), covars_additional) 
+               covarsi <- unique(covarsi)               
+               covarsi <- paste(covarsi, collapse=" + ")
                eqi     <- as.formula(paste(outcomei, covarsi, sep=" ~ "))   
-                       
-                       
+               print( paste0("Fixed terms: ", covarsi ) )
+              
+                           
              # GEE using slope data
                if(eqlist$variable[i] == "snp_s"){              
                   m_tmp <- f_gee(dat_slope, modeli, eqi, relatedi=related, modeltypei=modeltypei)           
@@ -99,7 +107,7 @@
         
       # whether to save coefficients for all variables
         if(!all_results){ 
-                gee_out <- f_summary(gee_out)
+                gee_out <- f_summary(gee_out,forwhich = snpi)
         } 
         gee_out <-  gee_out[order(gee_out$SNP, gee_out$modeltype, gee_out$model), ]
         rownames(gee_out) <- NULL

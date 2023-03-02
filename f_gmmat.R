@@ -31,12 +31,12 @@
 # IID: individual id
 
   library(GMMAT)
-  f_glmmkin <- function(dat, modeli, eqi, rand_s=NULL, m_id="IID", m_group="smoking_status", kmat=NULL, modeltypei=NULL){
+  f_glmmkin <- function(dat, modeli, eqi, rand_s=NULL, m_id="IID", m_group="smoking_status", kmati=NULL, modeltypei=NULL){
         use_kmat   <- FALSE
-        if(!is.null(kmat)){  
-          ids      <- rownames(kmat)[which(rownames(kmat) %in% dat$IID)]  
-          indexi   <- !is.na(match(dimnames(kmat)[[1]], ids))    
-          kmati    <- kmat[indexi, indexi]
+        if(!is.null(kmati)){  
+          ids      <- rownames(kmati)[which(rownames(kmati) %in% dat$IID)]  
+          indexi   <- !is.na(match(dimnames(kmati)[[1]], ids))    
+          kmati    <- kmati[indexi, indexi]
           use_kmat <- TRUE
         }
       #      
@@ -87,10 +87,15 @@
              print("=========================================================================")
              print( paste0("Fitting ", modeltypei, " model ", modeli, " with random slope (", randi, ") and outcome ", outcomei) )
              
-           # construct formula for specified SNP
-             covarsi <- gsub("snp", snpi, covarsi) 
+           # construct formula for specified SNP or variable
+             if(eqlist$variable[i] == "snp_s"  &  !grepl("^rs", snpi) ){
+                   covarsi <- gsub("snp_s", snpi, covarsi)     # for non-SNP variables
+             }else{
+                   covarsi <- gsub("snp", snpi, covarsi)       # for SNPs 
+             }
              covarsi <- gsub("timefactor_spirosq", "timeCenteredSq", covarsi) 
              covarsi <- c(unlist(strsplit(covarsi, split = ", ")), covars_additional) 
+             covarsi <- unique(covarsi)
              covarsi <- paste(covarsi, collapse=" + ")       
              eqi     <- as.formula(paste(outcomei, covarsi, sep=" ~ ")) 
              print( paste0("Fixed terms: ", covarsi ) )
@@ -102,15 +107,15 @@
                 if(eqlist$variable[i] == "snp_s" & modeltypei == "lm"){  
                   
                    if(is.null(kmat)){ m_groupi <- NULL }else{ m_groupi <- "smoking_status" }            
-                   m_tmp <- f_glmmkin(dat_slope_lm, modeli, eqi, rand_s=NULL, m_group=m_groupi, kmat=kmat, modeltypei=modeltypei)
+                   m_tmp <- f_glmmkin(dat_slope_lm, modeli, eqi, rand_s=NULL, m_group=m_groupi, kmati=kmat, modeltypei=modeltypei)
                
            # (B) lme model using slope data (multiple slopes as outcome, no random slope)  
                  }else if(eqlist$variable[i] == "snp_s" & modeltypei == "glmmkin"){              
-                  m_tmp <- f_glmmkin(dat_slope, modeli, eqi, rand_s=NULL, kmat=kmat, modeltypei=modeltypei)
+                  m_tmp <- f_glmmkin(dat_slope, modeli, eqi, rand_s=NULL, kmati=kmat, modeltypei=modeltypei)
              
            # (C) lme models    
                  }else{     
-                  m_tmp <- f_glmmkin(dat_full, modeli, eqi, rand_s=randi, kmat=kmat, modeltypei=modeltypei)
+                  m_tmp <- f_glmmkin(dat_full, modeli, eqi, rand_s=randi, kmati=kmat, modeltypei=modeltypei)
                  }
            # -------------
              
@@ -128,7 +133,7 @@
    
      # whether to save coefficients for all variables
         if(!all_results){ 
-                gmmat_out <- f_summary(gmmat_out)
+                gmmat_out <- f_summary(gmmat_out, forwhich = snpi)
         } 
        gmmat_out <-  gmmat_out[order(gmmat_out$SNP, gmmat_out$modeltype, gmmat_out$model), ]
        rownames(gmmat_out) <- NULL

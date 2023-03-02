@@ -29,9 +29,13 @@
 ##############################################################
   library(xlsx)
 
-  f_fit <- function(saveOutput=F){
-  
-      l_rs      <- colnames(d)[grep("^rs", colnames(d))]
+  f_fit <- function(BaseModel=FALSE, voi=NULL, saveOutput=FALSE){
+      
+      if(BaseModel){
+             l_rs <- voi                                      # for non-SNP variables
+      }else{ 
+             l_rs <- colnames(d)[grep("^rs", colnames(d))] 
+      }
       all_gmmat <- NULL
       all_gee   <- NULL
       
@@ -54,11 +58,19 @@
     
       all_models <- list(gmmat=all_gmmat, gee=all_gee) 
       if(saveOutput){
-         write.xlsx(all_gmmat, file = "summary_2023.xlsx", sheetName = "GMMAT", append = TRUE, showNA = F, row.names = F)    
-         write.xlsx(all_gee,   file = "summary_2023.xlsx", sheetName = "GEE",   append = TRUE, showNA = F, row.names = F)
-         save(all_models, file = "summary_2023.rdata")                           
+        if(BaseModel){
+              write.xlsx(all_gmmat, file = "summary_base_2023.xlsx", sheetName = "GMMAT", append = TRUE, showNA = F, row.names = F)    
+              write.xlsx(all_gee,   file = "summary_base_2023.xlsx", sheetName = "GEE",   append = TRUE, showNA = F, row.names = F)
+              save(all_models,      file = "summary_base_2023.rdata")
+        
+        }else{
+              write.xlsx(all_gmmat, file = "summary_2023.xlsx", sheetName = "GMMAT", append = TRUE, showNA = F, row.names = F)    
+              write.xlsx(all_gee,   file = "summary_2023.xlsx", sheetName = "GEE",   append = TRUE, showNA = F, row.names = F)
+              save(all_models,      file = "summary_2023.rdata")
+        }                         
       }
       
      return(all_models) 
      }
+
 

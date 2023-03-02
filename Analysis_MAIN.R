@@ -44,7 +44,7 @@
 ##############################################################
 
   d    <-   # read the dataset
-  kmat <-   # kinship matrix (set to NULL if individuals are unrelated)
+  kmat <-   # kinship matrix (set to NULL if individuals are unrelated, e.g. kmat <- NULL)
   
   covars_cohort  <-             # cohort specific covariates: e.g. PCs, equipmentchange......  (set to NULL if no additional covariates)
   data_multiRace <-             # multiple races? (TRUE/FALSE)
@@ -90,8 +90,9 @@
 ##############################################################  
 #                  2. fit models separately                  #
 ##############################################################
+
+
 ## -----------------------------------------------------------
-## For exploration
 ## example code: SNP rs507211
 
 
@@ -105,25 +106,37 @@
 ## show coefficients for ALL variables
    out_gmmat3 <- fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat,          covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat, all_results=TRUE)
 
+
+## fit base models for model 1 without SNPs
+   out_gmmat4 <- fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat[1,],      covars_additional=covars_for_eq, snpi="smoking_status", kmat=kmat) 
+   
+
    out_gmmat1
    out_gmmat2
    out_gmmat3
+   out_gmmat4
+
 
 
 ## GEE
 ## fit ALL GEE models for one SNP
    out_gee1 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee,           covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
 
-## fit model 1 and 3 for one SNP
+## fit model 1 and 3 (GEE) for one SNP
    out_gee2 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee[c(1,3), ], covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
 
 ## show coefficients for ALL variables
    out_gee3 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee,           covars_additional=covars_for_eq, snpi="rs507211", related=data_related, all_results=TRUE)
 
+
+## fit base models for model 1 without SNPs
+   out_gee4 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee[1, ],      covars_additional=covars_for_eq, snpi="smoking_status", related=data_related)
+
+
    out_gee1
    out_gee2
    out_gee3
-
+   out_gee4
 
 
 ##############################################################  
@@ -144,5 +157,13 @@
 ## fit ALL models for ALL SNPs and save the output to the excel file "summary_2023.xlsx"
    output <- f_fit(saveOutput=TRUE)
    
+   
+## fit ALL base models and save the output to the excel file "summary_base_2023.xlsx"
+   output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE)
+   
+
+
+
+
 
 

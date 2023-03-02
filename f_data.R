@@ -130,9 +130,10 @@
 ###################################################################### 
 ###################################################################### 
 ## summarize & clean
-   f_summary <- function(m_out){
+   f_summary <- function(m_out, forwhich=NULL){
    
-           want  <- c(m_out$variable[grep("^rs", m_out$variable)])  # s$variable[grep(":", s$variable)]
+           #want  <- c(m_out$variable[grep("^rs", m_out$variable)])  # s$variable[grep(":", s$variable)]
+           want  <- c(m_out$variable[grep(forwhich, m_out$variable)]) 
            m_out <- m_out[which((m_out$variable %in% want) ), ]
             
    return(m_out) 
