@@ -22,13 +22,15 @@
 ## 
   f_covars <- function(others=NULL,others_inter=NULL,multiRace=FALSE){
         # common covariates across cohort & will have interaction terms with time
-          covars_common <- c("smoking_status", "sex", "ht_baseline", "htBaseCenteredSq", "smoking_packyears_base") #  "smoking_cigs_perday"
+          covars_common   <- c("smoking_status", "sex", "ht_baseline", "htBaseCenteredSq", "smoking_packyears_base") #  "smoking_cigs_perday"
+          covars_forinter <- c("smoking_status", "sex", "smoking_packyears_base")       # covariates used for interaction with time
                 
         # if cohort has race variable     
-          if(multiRace){   covars_common <- c(covars_common, "race")     }
+          if(multiRace){   covars_common   <- c(covars_common,   "race")
+                           covars_forinter <- c(covars_forinter, "race")   }
         
         # Interaction terms with time & other interaction terms "others_inter" 
-          covars_interWithTime <- c(paste0(covars_common, "*", "timefactor_spiro") , others_inter)
+          covars_interWithTime <- c(paste0(covars_forinter, "*", "timefactor_spiro") , others_inter)
 
     
         # covariates used for fitting models

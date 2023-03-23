@@ -27,9 +27,12 @@
        
        #  
          if( sum(!(covars_all %in% colnames(dat))) > 0 ){
-            print("missing covariates: ")
+            print("ERROR: missing covariates: ")
             print( paste(covars_all[!(covars_all %in% colnames(dat))], collapse=",") )
              
+         }else if( length(grep("\\D", dat$IID)) > 0){ 
+            print("ERROR: IID is not numeric")
+            
          }else{
             print(paste0("Total number of observations: ", nrow(dat), 
                          "; Number of unique individuals: ", length(unique(dat$IID)))  )
@@ -40,6 +43,8 @@
             dat                    <- merge(dat, pft_count, by = "IID", all.x=T)
           
           # ------------------------ 
+            dat$FID                <- as.numeric(dat$FID)
+            dat$IID                <- as.numeric(dat$IID)
             dat$smoking_status     <- as.character(dat$smoking_status)
             dat$sex                <- as.character(dat$sex)  
             dat$timeCenteredSq     <- (dat$timefactor_spiro - mean(dat$timefactor_spiro, na.rm = T))^2

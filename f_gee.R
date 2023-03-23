@@ -41,9 +41,9 @@
            # 
              s <- as.data.frame(summary(m_gee)$coefficients)
              s <- cbind(modeltypei, modeli, dim(dat)[1], length(unique(dat$IID)), rownames(s), s, 
-                        QIC(m_gee)[1], as.numeric(timei["sys.self"]), as.numeric(timei["elapsed"]), relatedi)
+                        QIC(m_gee)[1], as.numeric(timei["sys.self"]), as.numeric(timei["elapsed"]), m_id, relatedi)
              colnames(s) <- c("modeltype", "model", "n_obs", "n_uniq", "variable", "Estimate", "SE", "Wald", "pvalue",
-                              "QIC", "sys_time", "elapsed_time","related")
+                              "QIC", "sys_time", "elapsed_time", "m_id","related")
 
    return(s)
    }

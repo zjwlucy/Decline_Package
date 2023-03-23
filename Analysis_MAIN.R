@@ -52,12 +52,12 @@
 
 
 ## example:
-   d    <- read.csv("FHS_data.csv", quote="", na.strings="")  
-   kmat <- read.csv("FHS_kinship.csv")
+#   d    <- read.csv("FHS_data.csv", quote="", na.strings="")  
+#   kmat <- read.csv("FHS_kinship.csv")
    
-   covars_cohort  <-  c("PC1", "PC2", "equipchange")
-   data_multiRace <-  FALSE          
-   data_related   <-  TRUE          
+#   covars_cohort  <-  c("PC1", "PC2", "equipchange")
+#   data_multiRace <-  FALSE          
+#   data_related   <-  TRUE          
 
 ############################################################## 
 
@@ -149,19 +149,22 @@
    source("f_fit.R")
 
 
-## fit ALL models for ALL SNPs but do not save the output
+## fit ALL the models for ALL SNPs but do not save the output
    output <- f_fit(saveOutput=FALSE)
 
- 
 
-## fit ALL models for ALL SNPs and save the output to the excel file "summary_2023.xlsx"
+## fit ALL the models for ALL SNPs and save SNP-related output to the excel file "summary_partial_2023.xlsx"
    output <- f_fit(saveOutput=TRUE)
-   
-   
-## fit ALL base models and save the output to the excel file "summary_base_2023.xlsx"
+
+    
+## fit ALL the BASE models for ALL SNPs and save SNP-related output to the excel file "summary_base_partial_2023.xlsx"
    output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE)
    
-
+   
+## fit ALL the models and save all the results to the excel file "summary_allresults_2023.xlsx"
+   output <- f_fit(saveOutput=TRUE, allresults=TRUE)
+   
+ 
 
 
 
