@@ -64,9 +64,9 @@
       
        if(saveOutput){
          if(BaseModel){
-               write.xlsx(all_gmmat, file = paste0("summary_base_",fullresults,"_2023.xlsx"), sheetName = "GMMAT", append = TRUE, showNA = F, row.names = F)    
-               write.xlsx(all_gee,   file = paste0("summary_base_",fullresults,"_2023.xlsx"), sheetName = "GEE",   append = TRUE, showNA = F, row.names = F)
-               save(all_models,      file = paste0("summary_base_",fullresults,"_2023.rdata") )
+               write.xlsx(all_gmmat, file = paste0("summary_",fullresults,"_base_2023.xlsx"), sheetName = "GMMAT", append = TRUE, showNA = F, row.names = F)    
+               write.xlsx(all_gee,   file = paste0("summary_",fullresults,"_base_2023.xlsx"), sheetName = "GEE",   append = TRUE, showNA = F, row.names = F)
+               save(all_models,      file = paste0("summary_",fullresults,"_base_2023.rdata") )
         
          }else{
                write.xlsx(all_gmmat, file = paste0("summary_",fullresults,"_2023.xlsx"), sheetName = "GMMAT", append = TRUE, showNA = F, row.names = F)    

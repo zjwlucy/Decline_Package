@@ -29,11 +29,14 @@
          if( sum(!(covars_all %in% colnames(dat))) > 0 ){
             print("ERROR: missing covariates: ")
             print( paste(covars_all[!(covars_all %in% colnames(dat))], collapse=",") )
-             
-         }else if( length(grep("\\D", dat$IID)) > 0){ 
-            print("ERROR: IID is not numeric")
-            
+    
          }else{
+            if( length(grep("\\D", dat$IID)) > 0){ 
+                print("WARNING: IID is not numeric, recreating the new IID")
+                n_iid   <- as.data.frame(table(dat$IID))
+                dat$IID <- rep(1:length(unique(dat$IID)), n_iid$Freq)    # check identical(dat$IID, rep(unique(dat$IID), n_iid$Freq))
+            }
+          #
             print(paste0("Total number of observations: ", nrow(dat), 
                          "; Number of unique individuals: ", length(unique(dat$IID)))  )
             

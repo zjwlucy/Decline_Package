@@ -89,10 +89,15 @@
              
            # construct formula for specified SNP or variable
              if(eqlist$variable[i] == "snp_s"  &  !grepl("^rs", snpi) ){
-                   covarsi <- gsub("snp_s", snpi, covarsi)     # for non-SNP variables
+                   covarsi <- gsub("snp_s", snpi, covarsi)     # for non-SNP variables                   
              }else{
                    covarsi <- gsub("snp", snpi, covarsi)       # for SNPs 
              }
+           # Remove the interaction with time for slope data: 
+             if(eqlist$variable[i] == "snp_s"){
+               covars_additional <- gsub("[*]timefactor_spiro", "",covars_additional)
+             }
+           #  
              covarsi <- gsub("timefactor_spirosq", "timeCenteredSq", covarsi) 
              covarsi <- c(unlist(strsplit(covarsi, split = ", ")), covars_additional) 
              covarsi <- unique(covarsi)
