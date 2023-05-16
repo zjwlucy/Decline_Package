@@ -4,19 +4,19 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 
 ## Columns for data set 
-  * __`IID`__:                    individual ID
-  * __`FID`__:                    family ID     (For unralted individuals, create a columns of the same number as "FID", e.g. a column of "1")
+  * __`IID`__:                    individual ID (numeric)
+  * __`FID`__:                    family ID (numeric); For unrelated individuals, create a column of the same number as "FID", e.g. a column of 1.
   * __`pre_fev1`__:               FEV1           
-  * __`SNPs`__:                   SNP information, column name MUST start with the lower case "rs", e.g. rs507211
-  * __`timefactor_spiro`__:       time since baseline exam
+  * __`SNPs`__:                   SNP information, column name MUST starts with the lower case "rs", e.g. rs507211, rsChrPosRefAlt
+  * __`timefactor_spiro`__:       time since the baseline exam (in YEARS)
   * __`age`__:                    time-varying age
-  * __`smoking_status`__:         Time-varying smoking status - never, former, current  (also used as grouping variable for glmmkin)
+  * __`smoking_status`__:         time-varying smoking status (never=0, former=1, current=2); Will be used as the grouping variable for glmmkin
 
 ### Baseline 
   * __`age_baseline`__:           baseline age
   * __`ht_baseline`__:            baseline height (in cm)
   * __`smoking_packyears_base`__: pack-years at baseline
-  * __`sex`__:                    biological sex
+  * __`sex`__:                    biological sex (female=0, male=1)
  
 ### Other cohort-specific variables
   * race
@@ -38,7 +38,7 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
   * dplyr
   * readxl
   * kinship2 (optional) for kinship matrix
-
+  * ggplot2
 
 
 
