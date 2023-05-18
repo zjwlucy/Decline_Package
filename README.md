@@ -19,7 +19,7 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
   * __`sex`__:                    biological sex (female=0, male=1)
  
 ### Other cohort-specific variables
-  * race
+  * race (must be categorical)
   * PCs (PC1, PC2, ... ...) 
   * equipchange ......  
 
