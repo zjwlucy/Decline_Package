@@ -18,17 +18,27 @@
 
 
 ## 
-   check_data <- function(dat, covars2=NULL){    
-       # basic 
-         covars1 <- c("IID", "FID", "pre_fev1", colnames(dat)[grep("^rs", colnames(dat))], 
-                      "timefactor_spiro", "age", "age_baseline") 
-       # additional covariates
-         covars_all <- c(covars1, covars2)   
+   check_data <- function(dat, covars2=NULL, snpi){    
+       # basic covariates
+         covars1    <- c("IID", "FID", "obsID", "pre_fev1", "timefactor_spiro", "age", "age_baseline", snpi)  #colnames(dat)[grep("^rs", colnames(dat))]
+         covars_all <- c(covars1, covars2)   # additional covariates for model (eg: height, race, ......)
+         covars_all <- unique(covars_all)
+         
+       # other variables that are not used in the model
+         covars_extra <- c("pre_fev1fvc", "fev1_pp") 
+       
+       
+       # assign unique id for each observation (used for merging)
+         dat       <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
+         dat$obsID <- 1:nrow(dat)
+         tmp       <- dat[, c("IID", "obsID", covars_extra)] 
+         
        
        #  
-         if( sum(!(covars_all %in% colnames(dat))) > 0 ){
+         if( sum(!(c(covars_all,covars_extra) %in% colnames(dat))) > 0 ){
             print("ERROR: missing covariates: ")
-            print( paste(covars_all[!(covars_all %in% colnames(dat))], collapse=",") )
+            print( paste(covars_all[  !(covars_all   %in% colnames(dat))], collapse=",") )
+            print( paste(covars_extra[!(covars_extra %in% colnames(dat))], collapse=",") )
     
          }else{
             if( length(grep("\\D", dat$IID)) > 0){ 
@@ -36,14 +46,15 @@
                 n_iid   <- as.data.frame(table(dat$IID))
                 dat$IID <- rep(1:length(unique(dat$IID)), n_iid$Freq)    # check identical(dat$IID, rep(unique(dat$IID), n_iid$Freq))
             }
-          #
+          ##
             print(paste0("Total number of observations: ", nrow(dat), 
-                         "; Number of unique individuals: ", length(unique(dat$IID)))  )
+                         "; Number of unique individuals: ", length(unique(dat$IID)) )  )
             
             dat                    <- na.omit(dat[, covars_all]) 
-            pft_count              <- data.frame(table(dat$IID))      # add number of pfts for each individual
+            pft_count              <- as.data.frame(table(dat$IID))      # add number of pfts for each individual
             colnames(pft_count)    <- c("IID", "n_pft")   
-            dat                    <- merge(dat, pft_count, by = "IID", all.x=T)
+            dat                    <- merge(dat, pft_count, by="IID",             all.x=T)
+            dat                    <- merge(dat, tmp,       by=c("IID", "obsID"), all.x=T)
           
           # ------------------------ 
             dat$FID                <- as.numeric(dat$FID)
@@ -56,7 +67,7 @@
             dat$htBaseCenteredSq   <- ( dat$ht_baseline - 165 )^2
           # ------------------------
             
-            dat <- dat[order(dat$FID, dat$IID, dat$age),]
+            dat <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
             print(paste0("Total number of observations after removing NAs: ", nrow(dat), 
                          "; Number of unique individuals: ", length(unique(dat$IID)))  )
             print( paste0("Variables included: ", paste(colnames(dat), collapse=",") )  )                                                  
@@ -77,19 +88,20 @@
    d_slope <- function(dat, firstlast=FALSE){
          print( paste0("Number of individuals with 1 observation is ", sum(dat$n_pft < 2)) )
          dat2 <- dat[which(dat$n_pft > 1), ]
-         dat2 <- dat2[order(dat2$IID, dat2$n_pft, dat2$age), ]
+         dat2 <- dat2[order(dat2$FID, dat2$IID, dat2$timefactor_spiro), ]
       
-       # using all observations or not 
+       ## using all observations or not 
          if(firstlast){
              dat2 <- dat2 %>%group_by(IID)%>%slice(c(1,n()))
          }
-       # 
+         
+       ## 
          cal_diff <- function(id_i){     
             x   <- dat2[which(dat2$IID == id_i),]
+            x   <- x[order(x$FID, x$IID, x$timefactor_spiro), ]
             tmp <- data.frame(x[1:(nrow(x)-1),], 
                               diff(x$pre_fev1), diff(x$timefactor_spiro))
             colnames(tmp) <- c(colnames(x), "fev1_diff", "time_diff")
-            colnames(tmp)[]
             return(tmp) 
          }   
             
@@ -103,7 +115,7 @@
          print(paste0("Total number of observations for slope data: ", nrow(dat2), 
                        "; Number of unique individuals: ", length(unique(dat2$IID)))  )
    
-         dat2 <- dat2[order(dat2$FID, dat2$IID, dat2$age), ]
+         dat2 <- dat2[order(dat2$FID, dat2$IID, dat2$timefactor_spiro), ]
          return(dat2)
         } 
 
@@ -141,7 +153,7 @@
    f_summary <- function(m_out, forwhich=NULL){
    
            #want  <- c(m_out$variable[grep("^rs", m_out$variable)])  # s$variable[grep(":", s$variable)]
-           want  <- c(m_out$variable[grep(forwhich, m_out$variable)]) 
+           want  <- m_out$variable[grep(forwhich, m_out$variable)]
            m_out <- m_out[which((m_out$variable %in% want) ), ]
             
    return(m_out) 

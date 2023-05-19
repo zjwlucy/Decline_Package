@@ -78,12 +78,6 @@
   covars_common <- covars$covars_common        # use for checking data
 
 
-# checking and cleaning the data
-  d1 <- check_data(d, covars2=covars_common)   
-  d2 <- d_slope(d1)                           # Full slope data
-  d3 <- d_slope(d1,firstlast=T)               # single slope data where slope = (last-first)/(time interval)
- 
-
 
 
 
@@ -95,6 +89,11 @@
 ## -----------------------------------------------------------
 ## example code: SNP rs507211
 
+## checking and cleaning the data
+   d1 <- check_data(d, covars2=covars_common, snpi="rs507211")   
+   d2 <- d_slope(d1)                           # Full slope data
+   d3 <- d_slope(d1,firstlast=T)               # single slope data where slope = (last-first)/(time interval)
+ 
 
 ## LME
 ## fit ALL lme models for one SNP:
@@ -139,6 +138,10 @@
    out_gee4
 
 
+
+
+
+
 ##############################################################  
 #                       3. fit ALL models                    #
 ##############################################################
@@ -153,19 +156,22 @@
    output <- f_fit(saveOutput=FALSE)
 
 
+
+## Model using SNP
 ## fit ALL the models for ALL SNPs and save SNP-related output to the excel file "summary_partial_2023.xlsx"
    output <- f_fit(saveOutput=TRUE)
-
-    
-## fit ALL the BASE models for ALL SNPs and save SNP-related output to the excel file "summary_base_partial_2023.xlsx"
-   output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE)
-   
    
 ## fit ALL the models and save all the results to the excel file "summary_allresults_2023.xlsx"
    output <- f_fit(saveOutput=TRUE, allresults=TRUE)
+  
    
- 
-
+   
+## Base model  
+## fit ALL the BASE models without SNPs and save smoking_status-related output to the excel file "summary_partial_base_2023.xlsx"
+   output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE)
+  
+## fit ALL the BASE models without SNPs and save smoking_status-related output to the excel file "summary_allresults_base_2023.xlsx"
+   output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE, allresults=TRUE)
 
 
 

@@ -52,7 +52,8 @@
   
       #
         if(is.null(m_group)){ m_group <- "NONE" }
-        s           <- cbind(modeltypei, modeli, dim(dat)[1], length(unique(dat$IID)), rownames(fixed), fixed, timei[2], timei[3], use_kmat, m_id, m_group)   
+        s           <- cbind(modeltypei, modeli, length(m_gmmat$Y), length(unique(m_gmmat$id_include)), rownames(fixed), fixed, 
+                             timei[2], timei[3], use_kmat, m_id, m_group)   
         colnames(s) <- c("modeltype", "model", "n_obs", "n_uniq", "variable", "Estimate", "SE", "t", "pvalue", 
                          "sys_time", "elapsed_time", "UseKinship", "m_id", "m_group") 
            
@@ -137,9 +138,9 @@
      # ----------------------------  
    
      # whether to save coefficients for all variables
-        if(!all_results){ 
-                gmmat_out <- f_summary(gmmat_out, forwhich = snpi)
-        } 
+       if(!all_results){ 
+               gmmat_out <- f_summary(gmmat_out, forwhich = snpi)
+       } 
        gmmat_out <-  gmmat_out[order(gmmat_out$SNP, gmmat_out$modeltype, gmmat_out$model), ]
        rownames(gmmat_out) <- NULL
  

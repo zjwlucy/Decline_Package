@@ -28,13 +28,13 @@
            # related individuals (cluster on FID)
              if(relatedi){
                  m_id   <- "FID"
-                 dat    <- dat[order(dat$FID, dat$IID, dat$age),]
+                 dat    <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
                  timei  <- system.time({  m_gee <- geeglm(eqi, id=FID, corstr="unstructured", data=dat)  })          
              
            # unrelated individuals (cluster on IID)
              }else{
                  m_id   <- "IID"
-                 dat    <- dat[order(dat$IID, dat$age),]
+                 dat    <- dat[order(dat$IID, dat$timefactor_spiro),]
                  timei  <- system.time({  m_gee <- geeglm(eqi, id=IID, corstr="unstructured", data=dat)  })    
              }
              
