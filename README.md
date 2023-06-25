@@ -5,10 +5,10 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 ## Columns for data set 
   * __`IID`__:                    individual ID (numeric)
-  * __`FID`__:                    family ID (numeric); For unrelated individuals, create a column of the same number as "FID", e.g. a column of 1.
+  * __`FID`__:                    family ID (numeric); For unrelated individuals, create a column of the same number as "FID", e.g. a column of 1
   * __`pre_fev1`__:               FEV1           
   * __`SNPs`__:                   SNP information, column name MUST starts with the lower case "rs", e.g. rs507211, rsChrPosRefAlt
-  * __`timefactor_spiro`__:       time since the baseline exam (in YEARS)
+  * __`timefactor_spiro`__:       time since the baseline exam (in YEARS). At baseline, timefactor_spiro=0
   * __`age`__:                    time-varying age
   * __`smoking_status`__:         time-varying smoking status (never=0, former=1, current=2); Will be used as the grouping variable for glmmkin
 
@@ -22,6 +22,10 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
   * race (must be categorical)
   * PCs (PC1, PC2, ... ...) 
   * equipchange ......  
+
+### variables for summary not for analysis
+  * FEV1/FVC:               ratio of fev1 and fvc
+  * FEV1 % predicted:       fev1 percent predicted
 
 
   * Kinship matrix (for related data):   both row names and column names MUST be IID      
