@@ -6,24 +6,30 @@
 ## https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MMH9wfZikHFWfLRQGKtw/edit#
 ## covariates:
 
-## IID:                    individual ID
-## FID:                    family ID  
+## IID:                    individual ID (numeric)
+## FID:                    family ID  (numeric)
 ## pre_fev1:               FEV1           
 ## SNPs:                   SNP information, column name MUST starts with lower case "rs", e.g. rs507211
-## timefactor_spiro:       time since baseline exam
+## timefactor_spiro:       time since the baseline exam (in YEARS). At baseline, timefactor_spiro=0.
 ## age:                    time-varying age
-## smoking_status:         Time-varying - never, former, current  (also used as grouping variable for glmmkin)
+## smoking_status:         time-varying smoking status (never=0, former=1, current=2); Will be used as the grouping variable for glmmkin.
 
 ## Baseline 
  # age_baseline:           baseline age
  # ht_baseline:            baseline height (in cm)
  # smoking_packyears_base: pack-years at baseline
- # sex:                    biological sex
+ # sex:                    biological sex (female=0, male=1)
  
 ## other cohort-specific variables.
  # race
  # PCs 
  # equipchange ......
+
+
+## variables for summary not for analysis
+## FEV1/FVC:               ratio of fev1 and fvc
+## FEV1 % predicted:       fev1 percent predicted
+
 
 
 ## kinship matrix (for related data):   both row names and column names MUST be IID      
@@ -49,15 +55,16 @@
   covars_cohort  <-             # cohort specific covariates: e.g. PCs, equipmentchange......  (set to NULL if no additional covariates)
   data_multiRace <-             # multiple races? (TRUE/FALSE)
   data_related   <-             # For GEE, dataset with related individuals or not?  (TRUE/FALSE)     
-
+  cohortname     <-             # cohort name
 
 ## example:
-#   d    <- read.csv("FHS_data.csv", quote="", na.strings="")  
+#   d    <- read.csv("FHS_data.csv")  
 #   kmat <- read.csv("FHS_kinship.csv")
    
 #   covars_cohort  <-  c("PC1", "PC2", "equipchange")
 #   data_multiRace <-  FALSE          
-#   data_related   <-  TRUE          
+#   data_related   <-  TRUE   
+#   cohortname     <-  "FHS"     
 
 ############################################################## 
 
@@ -159,19 +166,19 @@
 
 ## Model using SNP
 ## fit ALL the models for ALL SNPs and save SNP-related output to the excel file "summary_partial_2023.xlsx"
-   output <- f_fit(saveOutput=TRUE)
+   output <- f_fit(saveOutput=TRUE, cohort=cohortname)
    
 ## fit ALL the models and save all the results to the excel file "summary_allresults_2023.xlsx"
-   output <- f_fit(saveOutput=TRUE, allresults=TRUE)
+   output <- f_fit(saveOutput=TRUE, allresults=TRUE, cohort=cohortname)
   
    
    
 ## Base model  
 ## fit ALL the BASE models without SNPs and save smoking_status-related output to the excel file "summary_partial_base_2023.xlsx"
-   output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE)
+   output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE, cohort=cohortname)
   
 ## fit ALL the BASE models without SNPs and save smoking_status-related output to the excel file "summary_allresults_base_2023.xlsx"
-   output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE, allresults=TRUE)
+   output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE, allresults=TRUE, cohort=cohortname)
 
 
 

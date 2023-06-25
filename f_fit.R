@@ -27,12 +27,12 @@
 ##############################################################  
 #                       (2) fit models                       #
 ##############################################################
-  library(xlsx)
+  #library(xlsx)
   source("f_plots.R")
   source("f_tables.R")
 
 
-  f_fit <- function(BaseModel=FALSE, voi=NULL, saveOutput=FALSE, allresults=FALSE){
+  f_fit <- function(BaseModel=FALSE, voi=NULL, saveOutput=FALSE, allresults=FALSE, cohort="CohortName"){
       
         if(BaseModel){
               l_rs <- voi                                      # for non-SNP variables
@@ -75,7 +75,7 @@
         d_pheno <- check_data(d, covars2=covars_common, snpi=NULL)  
         
         s_table <- f_tables(dat=d_pheno, multiRace=data_multiRace)
-        f_plots(d_pheno)
+        f_plots(d_pheno, cohort_name=cohort)
         
 
 
@@ -88,17 +88,16 @@
       
         if(saveOutput){
           if(BaseModel){
-                write.xlsx(s_table,   file = paste0("summary_",fullresults,"_base_2023.xlsx"), sheetName = "BaselineTable", append = TRUE, showNA = F, row.names = F)  
-                write.xlsx(all_gmmat, file = paste0("summary_",fullresults,"_base_2023.xlsx"), sheetName = "GMMAT", append = TRUE, showNA = F, row.names = F)    
-                write.xlsx(all_gee,   file = paste0("summary_",fullresults,"_base_2023.xlsx"), sheetName = "GEE",   append = TRUE, showNA = F, row.names = F)
-                save(all_models,      file = paste0("summary_",fullresults,"_base_2023.rdata") )
+                write.csv(all_gmmat, file=paste0(cohort, "_GMMAT_",  fullresults,"_base_2023.csv"), row.names = F)   
+                write.csv(all_gee,   file=paste0(cohort, "_GEE_",    fullresults,"_base_2023.csv"), row.names = F)
+                save(all_models,     file=paste0(cohort, "_summary_",fullresults,"_base_2023.rdata") )
         
           }else{
-                write.xlsx(s_table,   file = paste0("summary_",fullresults,"_2023.xlsx"), sheetName = "BaselineTable", append = TRUE, showNA = F, row.names = F)  
-                write.xlsx(all_gmmat, file = paste0("summary_",fullresults,"_2023.xlsx"), sheetName = "GMMAT", append = TRUE, showNA = F, row.names = F)    
-                write.xlsx(all_gee,   file = paste0("summary_",fullresults,"_2023.xlsx"), sheetName = "GEE",   append = TRUE, showNA = F, row.names = F)
-                save(all_models,      file = paste0("summary_",fullresults,"_2023.rdata") )
-          }                         
+                write.csv(all_gmmat, file=paste0(cohort, "_GMMAT_",  fullresults,"_2023.csv"), row.names = F)    
+                write.csv(all_gee,   file=paste0(cohort, "_GEE_",    fullresults,"_2023.csv"), row.names = F)
+                save(all_models,     file=paste0(cohort, "_summary_",fullresults,"_2023.rdata") )
+          }
+          write.csv(s_table,   file=paste0(cohort, "_table_2023.csv"), row.names = F)                           
         }
       
       
