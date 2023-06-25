@@ -28,7 +28,7 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
   * FEV1 % predicted:       fev1 percent predicted
 
 
-
+###  
 
   * Kinship matrix (for related data):   both row names and column names MUST be IID      
       
