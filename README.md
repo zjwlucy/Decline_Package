@@ -23,7 +23,7 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
   * PCs (PC1, PC2, ... ...) 
   * equipchange ......  
 
-### variables for summary not for analysis
+### Variables for summary not for analysis
   * FEV1/FVC:               ratio of fev1 and fvc
   * FEV1 % predicted:       fev1 percent predicted
 
