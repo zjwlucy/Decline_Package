@@ -27,23 +27,26 @@
 
 
 ## variables for summary not for analysis
-## FEV1/FVC:               ratio of fev1 and fvc
-## FEV1 % predicted:       fev1 percent predicted
+ # pre_fev1fvc:   ratio of fev1 and fvc (fev1/fvc)
+ # fev1_pp:       fev1 percent predicted
 
 
 
 ## kinship matrix (for related data):   both row names and column names MUST be IID      
       
 
-## required package
- # geepack
- # GMMAT
- # dplyr
- # readxl
+## R version: R/4.0.2
+
+## Required package
+ # geepack_1.3-2
+ # GMMAT_1.3.1
+ # dplyr_1.0.2
+ # readxl_1.3.1
  # kinship2 (optional) for kinship matrix
+ # ggplot2_3.3.2
 
 
-  
+
 
 ##############################################################  
 #                 0. Input Needed from users                 #
