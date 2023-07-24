@@ -35,16 +35,24 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 
 
+## Required packages
+### If current version does not work, you can try previous version
+### Both versions should give the SAME output
 
-## R version: R/4.0.2
+### R version R/4.2.1     (current version)
+   * geepack_1.3.9
+   * GMMAT_1.4.0 
+   * dplyr_1.1.2  
+   * readxl_1.4.3
+   * ggplot2_3.4.2     
+   * kinship2_1.9.6 (optional) for kinship matrix 
 
-### Required package
-  * geepack_1.3-2
-  * GMMAT_1.3.1
-  * dplyr_1.0.2
-  * readxl_1.3.1
-  * kinship2 (optional) for kinship matrix
-  * ggplot2_3.3.2
-
+### R version: R/4.0.2  (previous version)
+   * geepack_1.3-2
+   * GMMAT_1.3.1
+   * dplyr_1.0.2
+   * readxl_1.3.1
+   * ggplot2_3.3.2
+   * kinship2 (optional) 
 
 ## For analysis, use "Analysis_MAIN.R"
