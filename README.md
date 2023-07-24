@@ -36,8 +36,8 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 
 ## Required packages
-### If current version does not work, you can try previous version
-### Both versions should give the SAME output
+If current version does not work, you can try previous version
+Both versions should give the SAME output
 
 ### R version R/4.2.1     (current version)
    * geepack_1.3.9
