@@ -61,6 +61,9 @@
    #l_eq <- read_excel("decline_selectedM_20230109.xlsx")
    l_eq <- read_excel("decline_selectedM_20230424.xlsx")
   
+ # replace the name of time^2 by timeCenteredSq
+   l_eq$Fixed <- gsub("timefactor_spirosq", "timeCenteredSq", l_eq$Fixed) 
+ 
 
 ## selected models:
  # --------------- GMMAT --------------- 
@@ -96,5 +99,3 @@
 
 
 
-
- 

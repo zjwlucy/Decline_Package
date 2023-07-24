@@ -20,31 +20,51 @@
  # smoking_packyears_base: pack-years at baseline
  # sex:                    biological sex (female=0, male=1)
  
-## other cohort-specific variables.
+## Other cohort-specific variables.
  # race
  # PCs 
  # equipchange ......
 
 
-## variables for summary not for analysis
+## Variables for summary not for analysis
  # pre_fev1fvc:   ratio of fev1 and fvc (fev1/fvc)
  # fev1_pp:       fev1 percent predicted
-
 
 
 ## kinship matrix (for related data):   both row names and column names MUST be IID      
       
 
-## R version: R/4.0.2
 
-## Required package
- # geepack_1.3-2
- # GMMAT_1.3.1
- # dplyr_1.0.2
- # readxl_1.3.1
- # kinship2 (optional) for kinship matrix
- # ggplot2_3.3.2
 
+## ---------------------------------------------------------------
+## Required packages
+## If current version does not work, you can try previous version
+## Both versions should give the SAME output
+
+
+## R version R/4.2.1     (current version)
+   # geepack_1.3.9
+   # GMMAT_1.4.0 
+   # dplyr_1.1.2  
+   # readxl_1.4.3
+   # ggplot2_3.4.2     
+   # kinship2_1.9.6 (optional) for kinship matrix 
+
+
+## R version: R/4.0.2  (previous version)
+   # geepack_1.3-2
+   # GMMAT_1.3.1
+   # dplyr_1.0.2
+   # readxl_1.3.1
+   # ggplot2_3.3.2
+   # kinship2 (optional) 
+
+
+
+ 
+
+  
+   
 
 
 
@@ -79,7 +99,7 @@
 
 
 ##############################################################  
-#           1. preparation/checking (must run)               #
+#           (1). Preparation/checking (must run)             #
 ##############################################################
   source("f_data.R")
  
@@ -90,75 +110,15 @@
 
 
 
-
 ##############################################################  
-#                  2. fit models separately                  #
-##############################################################
-
-
-## -----------------------------------------------------------
-## example code: SNP rs507211
-
-## checking and cleaning the data
-   d1 <- check_data(d, covars2=covars_common, snpi="rs507211")   
-   d2 <- d_slope(d1)                           # Full slope data
-   d3 <- d_slope(d1,firstlast=T)               # single slope data where slope = (last-first)/(time interval)
- 
-
-## LME
-## fit ALL lme models for one SNP:
-   out_gmmat1 <- fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat,          covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat)
-   
-## fit model 3 and model 6 (LME) for one SNP:   
-   out_gmmat2 <- fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat[c(3,6),], covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat) 
-
-## show coefficients for ALL variables
-   out_gmmat3 <- fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat,          covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat, all_results=TRUE)
-
-
-## fit base models for model 1 without SNPs
-   out_gmmat4 <- fit_all_gmmat(dat_full=d1, dat_slope=d2, dat_slope_lm=d3, eqlist=l_gmmat[1,],      covars_additional=covars_for_eq, snpi="smoking_status", kmat=kmat) 
-   
-
-   out_gmmat1
-   out_gmmat2
-   out_gmmat3
-   out_gmmat4
-
-
-
-## GEE
-## fit ALL GEE models for one SNP
-   out_gee1 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee,           covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
-
-## fit model 1 and 3 (GEE) for one SNP
-   out_gee2 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee[c(1,3), ], covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
-
-## show coefficients for ALL variables
-   out_gee3 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee,           covars_additional=covars_for_eq, snpi="rs507211", related=data_related, all_results=TRUE)
-
-
-## fit base models for model 1 without SNPs
-   out_gee4 <- fit_all_gee(dat_full=d1, dat_slope=d2, eqlist=l_gee[1, ],      covars_additional=covars_for_eq, snpi="smoking_status", related=data_related)
-
-
-   out_gee1
-   out_gee2
-   out_gee3
-   out_gee4
-
-
-
-
-
-
-##############################################################  
-#                       3. fit ALL models                    #
+#                     (2). Fit ALL models                    #
 ##############################################################
 ## -----------------------------------------------------------
-## Make sure to run Section 1 before running the code below
+## Make sure to run Section (1) before running the code below
+## DO NOT run section (3) before this section
 
-## Note: fitting ALL models for ALL SNPs may take a long time
+## Note: 
+ # Fitting ALL models for ALL SNPs may take a long time
    source("f_fit.R")
 
 
@@ -172,17 +132,112 @@
    output <- f_fit(saveOutput=TRUE, cohort=cohortname)
    
 ## fit ALL the models and save all the results to the excel file "summary_allresults_2023.xlsx"
-   output <- f_fit(saveOutput=TRUE, allresults=TRUE, cohort=cohortname)
+   output <- f_fit(saveOutput=TRUE, cohort=cohortname, allresults=TRUE)
   
    
    
 ## Base model  
 ## fit ALL the BASE models without SNPs and save smoking_status-related output to the excel file "summary_partial_base_2023.xlsx"
-   output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE, cohort=cohortname)
+   output <- f_fit(saveOutput=TRUE, cohort=cohortname, BaseModel=TRUE, voi="smoking_status")
   
 ## fit ALL the BASE models without SNPs and save smoking_status-related output to the excel file "summary_allresults_base_2023.xlsx"
-   output <- f_fit(BaseModel=TRUE, voi="smoking_status", saveOutput=TRUE, allresults=TRUE, cohort=cohortname)
+   output <- f_fit(saveOutput=TRUE, cohort=cohortname, BaseModel=TRUE, voi="smoking_status",  allresults=TRUE)
 
+
+
+
+## Main effect model for SNP
+## Model with only main effect of SNP (no interaction term: SNP*time)
+
+## Save SNP related results:
+   output <- f_fit(saveOutput=TRUE, cohort=cohortname, SNPmainOnly=TRUE)
+   
+## Save all results:   
+   output <- f_fit(saveOutput=TRUE, cohort=cohortname, SNPmainOnly=TRUE, allresults=TRUE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##############################################################  
+#            (3). Fit models separately   (Extra)            #
+##############################################################
+## This section is for analyst to test/debug/explore specific 
+## model that does not look correct. 
+
+## Make sure to run Section (1) before running the code below.
+## You may either run section (3) or section (2) because 
+## section (2) may not work if you run it after running section (3)
+
+
+## -----------------------------------------------------------
+## example code: SNP rs507211
+
+## checking and cleaning the data
+   d1_test <- check_data(dat=d, covars2=covars_common, snpi="rs507211")   
+   d2_test <- d_slope(d1_test)                           # Full slope data
+   d3_test <- d_slope(d1_test,firstlast=T)               # single slope data where slope = (last-first)/(time interval)
+ 
+
+## LME
+## fit ALL lme models for one SNP:
+   out_gmmat1 <- fit_all_gmmat(dat_full=d1_test, dat_slope=d2_test, dat_slope_lm=d3_test, eqlist=l_gmmat,          
+                               covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat)
+   
+## fit model 3 and model 6 (LME) for one SNP:   
+   out_gmmat2 <- fit_all_gmmat(dat_full=d1_test, dat_slope=d2_test, dat_slope_lm=d3_test, eqlist=l_gmmat[c(3,6),], 
+                               covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat) 
+
+## show coefficients for ALL variables
+   out_gmmat3 <- fit_all_gmmat(dat_full=d1_test, dat_slope=d2_test, dat_slope_lm=d3_test, eqlist=l_gmmat,          
+                               covars_additional=covars_for_eq, snpi="rs507211", kmat=kmat, all_results=TRUE)
+
+
+## fit base models for model 1 without SNPs
+   out_gmmat4 <- fit_all_gmmat(dat_full=d1_test, dat_slope=d2_test, dat_slope_lm=d3_test, eqlist=l_gmmat[1,],      
+                               covars_additional=covars_for_eq, snpi="smoking_status", kmat=kmat) 
+   
+
+   out_test_gmmat1
+   out_test_gmmat2
+   out_test_gmmat3
+   out_test_gmmat4
+
+
+
+## GEE
+## fit ALL GEE models for one SNP
+   out_gee1 <- fit_all_gee(dat_full=d1_test, dat_slope=d2_test, eqlist=l_gee,           
+                           covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
+
+## fit model 1 and 3 (GEE) for one SNP
+   out_gee2 <- fit_all_gee(dat_full=d1_test, dat_slope=d2_test, eqlist=l_gee[c(1,3), ], 
+                           covars_additional=covars_for_eq, snpi="rs507211", related=data_related)
+
+## show coefficients for ALL variables
+   out_gee3 <- fit_all_gee(dat_full=d1_test, dat_slope=d2_test, eqlist=l_gee,           
+                           covars_additional=covars_for_eq, snpi="rs507211", related=data_related, all_results=TRUE)
+
+
+## fit base models for model 1 without SNPs
+   out_gee4 <- fit_all_gee(dat_full=d1_test, dat_slope=d2_test, eqlist=l_gee[1, ],      
+                           covars_additional=covars_for_eq, snpi="smoking_status", related=data_related)
+
+
+   out_test_gee1
+   out_test_gee2
+   out_test_gee3
+   out_test_gee4
 
 
 

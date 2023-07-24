@@ -73,7 +73,7 @@
 ## all_results: whether to present coefficient for all 
 
    fit_all_gmmat <- function(dat_full, dat_slope, dat_slope_lm, eqlist, 
-                             covars_additional=NULL, snpi, kmat=NULL, all_results=FALSE){
+                             covars_additional=NULL, snpi, kmat=NULL, all_results=FALSE, SNP_mainOnly=FALSE){
    
      # ----------------------------     
        gmmat_out <- NULL 
@@ -88,6 +88,11 @@
              print("=========================================================================")
              print( paste0("Fitting ", modeltypei, " model ", modeli, " with random slope (", randi, ") and outcome ", outcomei) )
              
+           ## 
+           # SNP main effect model or not
+             if(SNP_mainOnly){ covarsi <- gsub("snp[*]timefactor_spiro", "snp, timefactor_spiro", covarsi)
+                               covarsi <- gsub("snp[*]age",              "snp, age",              covarsi) }
+                 
            # construct formula for specified SNP or variable
              if(eqlist$variable[i] == "snp_s"  &  !grepl("^rs", snpi) ){
                    covarsi <- gsub("snp_s", snpi, covarsi)     # for non-SNP variables                   
@@ -96,17 +101,17 @@
              }
            # Remove the interaction with time for slope data: 
              if(eqlist$variable[i] == "snp_s"){
-               covars_additional <- gsub("[*]timefactor_spiro", "",covars_additional)
+               covars_additional <- gsub("[*]timefactor_spiro", "", covars_additional)
              }
            #  
-             covarsi <- gsub("timefactor_spirosq", "timeCenteredSq", covarsi) 
              covarsi <- c(unlist(strsplit(covarsi, split = ", ")), covars_additional) 
              covarsi <- unique(covarsi)
              covarsi <- paste(covarsi, collapse=" + ")       
              eqi     <- as.formula(paste(outcomei, covarsi, sep=" ~ ")) 
              print( paste0("Fixed terms: ", covarsi ) )
+             
             
-           # -------------          
+           ## ------------------------          
            # (A) linear model using slope data (with only 1 observation per individual, no random slope)
            #    (1) 1 observation, independent individuals  (ID=IID, no kmat, no slope)   we cannot use m_group="smoking_status"
            #    (2) 1 observation, related individuals  (ID=IID, kmat, no slope)    ????do we need m_group="smoking_status"
@@ -123,7 +128,7 @@
                  }else{     
                   m_tmp <- f_glmmkin(dat_full, modeli, eqi, rand_s=randi, kmati=kmat, modeltypei=modeltypei)
                  }
-           # -------------
+           ## ------------------------          
              
              if(is.null(randi)){ randi <- "NONE"}
              m_tmp         <- cbind(m_tmp, SNP=snpi, randslope=randi, outcome=outcomei)

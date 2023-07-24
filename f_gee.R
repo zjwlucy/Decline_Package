@@ -60,7 +60,8 @@
 ## related:     does the data contain related or unrelated individuals
 ## all_results: whether to present coefficient for all 
 
-   fit_all_gee <- function(dat_full, dat_slope, eqlist, covars_additional=NULL, snpi, related, all_results=FALSE){
+   fit_all_gee <- function(dat_full, dat_slope, eqlist, covars_additional=NULL, snpi, related, all_results=FALSE, SNP_mainOnly=FALSE){
+       
        # ----------------------------  
          gee_out <- NULL 
          for(i in 1:nrow(eqlist) ){ 
@@ -71,7 +72,12 @@
                outcomei   <- ifelse(eqlist$variable[i] == "snp_s", "fev1_s", "pre_fev1")
                print("=========================================================================")
                print( paste0("Fitting ", modeltypei, " model ", modeli) )
-               
+           
+             ##  
+             # SNP main effect model or not
+               if(SNP_mainOnly){ covarsi <- gsub("snp[*]timefactor_spiro", "snp, timefactor_spiro", covarsi)
+                                 covarsi <- gsub("snp[*]age",              "snp, age",              covarsi) }
+                         
              # construct formula for specified SNP or variable
                if(eqlist$variable[i] == "snp_s"  &  !grepl("^rs", snpi) ){
                     covarsi <- gsub("snp_s", snpi, covarsi)     # for non-SNP variables
@@ -80,17 +86,16 @@
                }
              # Remove the interaction with time for slope data: 
                if(eqlist$variable[i] == "snp_s"){
-                  covars_additional <- gsub("[*]timefactor_spiro", "",covars_additional)
+                  covars_additional <- gsub("[*]timefactor_spiro", "", covars_additional)
                }
              #     
-               covarsi <- gsub("timefactor_spirosq", "timeCenteredSq", covarsi) 
                covarsi <- c(unlist(strsplit(covarsi, split = ", ")), covars_additional) 
                covarsi <- unique(covarsi)               
                covarsi <- paste(covarsi, collapse=" + ")
                eqi     <- as.formula(paste(outcomei, covarsi, sep=" ~ "))   
                print( paste0("Fixed terms: ", covarsi ) )
               
-             ##-----------------------              
+             ##--------------------------------              
              # GEE using slope data
                if(eqlist$variable[i] == "snp_s"){              
                   m_tmp <- f_gee(dat_slope, modeli, eqi, relatedi=related, modeltypei=modeltypei)           
@@ -107,9 +112,8 @@
                
            }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
          }    
-      # ----------------------------   
-        
-        
+      ## ----------------------------          
+      
       # whether to save coefficients for all variables
         if(!all_results){ 
                 gee_out <- f_summary(gee_out,forwhich = snpi)
