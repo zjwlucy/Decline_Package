@@ -10,14 +10,15 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
   * __`SNPs`__:                   SNP information, column name MUST starts with the lower case "rs", e.g. rs507211, rsChrPosRefAlt
   * __`timefactor_spiro`__:       time since the baseline exam (in YEARS). At baseline, timefactor_spiro=0
   * __`age`__:                    time-varying age
-  * __`smoking_status`__:         time-varying smoking status (never=0, former=1, current=2); Will be used as the grouping variable for glmmkin
+  * __`smoking_status`__:         time-varying smoking status (never=0, former=1, current=2); 
 
 ### Baseline 
   * __`age_baseline`__:           baseline age
   * __`ht_baseline`__:            baseline height (in cm)
   * __`smoking_packyears_base`__: pack-years at baseline
   * __`sex`__:                    biological sex (female=0, male=1)
- 
+  * __`smoking_status_base`__:    baseline smoking status (never=0, former=1, current=2); Will be used as the grouping variable for glmmkin.
+     
 ### Other cohort-specific variables
   * race (must be categorical)
   * PCs (PC1, PC2, ... ...) 
