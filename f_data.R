@@ -20,7 +20,7 @@
 ## 
    check_data <- function(dat, covars2=NULL, snpi){    
        # basic covariates
-         covars1    <- c("IID", "FID", "obsID", "pre_fev1", "timefactor_spiro", "age", "age_baseline", snpi)  #colnames(dat)[grep("^rs", colnames(dat))]
+         covars1    <- c("IID", "FID", "obsID", "pre_fev1", "timefactor_spiro", "age", "age_baseline", snpi) 
          covars_all <- c(covars1, covars2)   # additional covariates for model (eg: height, race, ......)
          covars_all <- unique(covars_all)
          
@@ -28,7 +28,7 @@
          covars_extra <- c("pre_fev1fvc", "fev1_pp") 
        
        
-       # assign unique id for each observation (used for merging)
+       # assign unique id for each observation (used for merging later)
          dat       <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
          dat$obsID <- 1:nrow(dat)
          tmp       <- dat[, c("IID", "obsID", covars_extra)] 
@@ -40,12 +40,19 @@
             print( paste(covars_all[  !(covars_all   %in% colnames(dat))], collapse=",") )
             print( paste(covars_extra[!(covars_extra %in% colnames(dat))], collapse=",") )
     
+         }else if( sum(duplicated(dat[,c("IID", "FID", "age")]),
+                       duplicated(dat[,c("IID", "FID", "timefactor_spiro")]),
+                       duplicated(dat[,covars_all])  
+                       ) > 0 ){                                              # check duplicated rows
+            print("ERROR: Data has duplicated rows") 
+         
          }else{
             if( length(grep("\\D", dat$IID)) > 0){ 
                 print("WARNING: IID is not numeric, recreating the new IID")
                 n_iid   <- as.data.frame(table(dat$IID))
                 dat$IID <- rep(1:length(unique(dat$IID)), n_iid$Freq)    # check identical(dat$IID, rep(unique(dat$IID), n_iid$Freq))
             }
+              
           ##
             print(paste0("Total number of observations: ", nrow(dat), 
                          "; Number of unique individuals: ", length(unique(dat$IID)) )  )
@@ -60,6 +67,7 @@
             dat$FID                <- as.numeric(dat$FID)
             dat$IID                <- as.numeric(dat$IID)
             dat$smoking_status     <- as.character(dat$smoking_status)
+            dat$smoking_status_base<- as.character(dat$smoking_status_base)
             dat$sex                <- as.character(dat$sex)  
             dat$timeCenteredSq     <- (dat$timefactor_spiro - mean(dat$timefactor_spiro, na.rm = T))^2
             #dat$htCenteredSq     <- ( dat$ht_cm       - mean(dat$ht_baseline[which(dat$timefactor_spiro == 0)], na.rm = T) )^2
@@ -67,12 +75,30 @@
             dat$htBaseCenteredSq   <- ( dat$ht_baseline - 165 )^2
           # ------------------------
             
-            dat <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
+          # Record the order of each observation for each individuals
+            dat_count <- lapply(unique(dat$IID), function(x){
+                                tmp         <- dat[which(dat$IID == x), c("IID", "obsID", "age")]
+                                tmp$obsRank <- rank(tmp$age)
+                                return(tmp)
+                               })
+            dat_count <- do.call(rbind, dat_count)
+            dat       <- merge(dat, dat_count[,c("IID", "obsID", "obsRank")], by=c("IID", "obsID"), all.x=T)                   
+            
+            
+          # check changes in baseline
+            id_base <- which(dat$obsRank == 1)
+            check_baseline <- sum(all.equal(as.numeric(dat$age_baseline[id_base]), as.numeric(dat$age[id_base])), 
+                                  identical(dat$smoking_status_base[id_base],      dat$smoking_status[id_base]) )                     
+            if(check_baseline <2){ print("Warning: Baseline has changed after removing the missing values") }
+            
+          #  
+            dat <- dat[order(dat$FID, dat$IID, dat$age),]
             print(paste0("Total number of observations after removing NAs: ", nrow(dat), 
                          "; Number of unique individuals: ", length(unique(dat$IID)))  )
             print( paste0("Variables included: ", paste(colnames(dat), collapse=",") )  )                                                  
             
             return(dat)
+            
          }
         }
 

@@ -15,12 +15,6 @@
 #  covars_common <- covars$covars_common        # use for checking data
 
 
-# checking and cleaning the data
-#  d1 <- check_data(d, covars2=covars_common, snpi=)   
-#  d2 <- d_slope(d1)                           # Full slope data
-#  d3 <- d_slope(d1,firstlast=T)               # single slope data where slope = (last-first)/(time interval)
- 
-
 
 
 
@@ -36,12 +30,13 @@
   # saveOutput  (T/F): TRUE = save model results to csv and rdata file
   # allresults  (T/F): TRUE = save all the estimates for all variables (including those that we are not interested in)
   # SNPmainOnly (T/F): TRUE = remove the interaction term for SNP*time and SNP*age, only include main effect of SNP
-  f_fit <- function(BaseModel=FALSE, voi=NULL, saveOutput=FALSE, allresults=FALSE, cohort="CohortName", SNPmainOnly=FALSE){
+  f_fit <- function(dat, covars_common, covars_for_eq, data_related,
+                    BaseModel=FALSE, voi=NULL, saveOutput=FALSE, allresults=FALSE, cohort="CohortName", SNPmainOnly=FALSE){
       
         if(BaseModel){
               l_rs <- voi                                    # for non-SNP variables
         }else{ 
-              l_rs <- colnames(d)[grep("^rs", colnames(d))] 
+              l_rs <- colnames(dat)[grep("^rs", colnames(dat))] 
         }
       
       
@@ -55,7 +50,7 @@
           print("#############################")
         
           # checking and cleaning the data
-            d1 <- check_data(dat=d, covars2=covars_common, snpi=tmpSNP)   
+            d1 <- check_data(dat=dat, covars2=covars_common, snpi=tmpSNP)   
             d2 <- d_slope(d1)                           # Full slope data
             d3 <- d_slope(d1,firstlast=T)               # single slope data where slope = (last-first)/(time interval)
  
@@ -76,7 +71,7 @@
 
      ## ------------------------------------------------------------   
      ## plots & tables based on dataset WITHOUT genetic information
-        d_pheno <- check_data(d, covars2=covars_common, snpi=NULL)  
+        d_pheno <- check_data(dat=dat, covars2=covars_common, snpi=NULL)  
         
         s_table <- f_tables(dat=d_pheno, multiRace=data_multiRace)
         f_plots(d_pheno, cohort_name=cohort)

@@ -5,30 +5,37 @@
 ## Baseline 
  # age_baseline:           baseline age
  # ht_baseline:            baseline height (in cm)
- # htBaseCenteredSq:        (baseline height - 165)^2
- # smoking_packyears_base:
+ # htBaseCenteredSq:       (baseline height - 165)^2
+ # smoking_packyears_base: pack-years at baseline
  # sex:                    biological sex
+ 
+## Time-varying
+ # smoking_status 
  
 ## other cohort-specific variables.
  # race
  # PCs 
  # equipchange ......
 
-
 ## Interaction term with time
- # smoking status, sex, height, height^2, pack-years, race
-   
+ # smoking status, sex, smoking_packyears_base, race
+      
+## grouping variable
+ # smoking_status_base: baseline smoking status (never=0, former=1, current=2); Will be used as the grouping variable for glmmkin.
+
+
 ## ------------------------------------------------------------------------   
 ## 
 ## others: cohort specific covariates
 
   f_covars <- function(others=NULL,others_inter=NULL,multiRace=FALSE){    
         # common covariates across cohort & will have interaction terms with time
-          covars_common   <- c("smoking_status", "sex", "smoking_packyears_base", "ht_baseline", "htBaseCenteredSq") #  "smoking_cigs_perday"
+          covars_common   <- c("smoking_status", "sex", "smoking_packyears_base", "ht_baseline", "htBaseCenteredSq") 
           covars_forinter <- c("smoking_status", "sex", "smoking_packyears_base")       # covariates used for interaction with time
                 
         # if cohort has race variable     
-          if(multiRace){   covars_common   <- c(covars_common,   "race")
+          if(multiRace){   print("Note: Variable race is added")
+                           covars_common   <- c(covars_common,   "race")
                            covars_forinter <- c(covars_forinter, "race")   }
         
         # Interaction terms with time & other interaction terms "others_inter" 
@@ -40,7 +47,7 @@
         
         # common covariates used for checking data  
           covars_common <- covars_common[ !(covars_common %in% c("htBaseCenteredSq"))  ]
-          covars_common <- c(covars_common, others)
+          covars_common <- c(covars_common, others, "smoking_status_base")
         
         #  
           covars_list   <- list(covars_for_eq, covars_common)

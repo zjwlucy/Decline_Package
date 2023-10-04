@@ -50,8 +50,9 @@
        
       ##----------------------------------------------------------- 
       # baseline characteristics  
-        dat_base <- dat[which(dat$timefactor_spiro == 0), ]
-         
+        dat_base <- dat[which(dat$obsRank == 1), ]
+        
+          
       # check if number of observations match
         pft_count            <- as.data.frame(table(dat$IID))      # add number of pfts for each individual
         colnames(pft_count)  <- c("IID", "n_pft")   

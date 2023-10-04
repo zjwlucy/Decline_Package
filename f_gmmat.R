@@ -31,7 +31,7 @@
 # IID: individual id
 
   library(GMMAT)
-  f_glmmkin <- function(dat, modeli, eqi, rand_s=NULL, m_id="IID", m_group="smoking_status", kmati=NULL, modeltypei=NULL){
+  f_glmmkin <- function(dat, modeli, eqi, rand_s=NULL, m_id="IID", m_group="smoking_status_base", kmati=NULL, modeltypei=NULL){
         use_kmat   <- FALSE
         if(!is.null(kmati)){  
           ids      <- rownames(kmati)[which(rownames(kmati) %in% dat$IID)]  
@@ -113,11 +113,11 @@
             
            ## ------------------------          
            # (A) linear model using slope data (with only 1 observation per individual, no random slope)
-           #    (1) 1 observation, independent individuals  (ID=IID, no kmat, no slope)   we cannot use m_group="smoking_status"
-           #    (2) 1 observation, related individuals  (ID=IID, kmat, no slope)    ????do we need m_group="smoking_status"
+           #    (1) 1 observation, independent individuals  (ID=IID, no kmat, no slope)   we cannot use m_group="smoking_status_base"
+           #    (2) 1 observation, related individuals  (ID=IID, kmat, no slope)    ????do we need m_group="smoking_status_base"
                 if(eqlist$variable[i] == "snp_s" & modeltypei == "lm"){  
                   
-                   if(is.null(kmat)){ m_groupi <- NULL }else{ m_groupi <- "smoking_status" }            
+                   if(is.null(kmat)){ m_groupi <- NULL }else{ m_groupi <- "smoking_status_base" }            
                    m_tmp <- f_glmmkin(dat_slope_lm, modeli, eqi, rand_s=NULL, m_group=m_groupi, kmati=kmat, modeltypei=modeltypei)
                
            # (B) lme model using slope data (multiple slopes as outcome, no random slope)  
