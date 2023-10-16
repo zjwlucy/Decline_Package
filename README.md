@@ -25,8 +25,8 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
   * equipchange ......  
 
 ### Variables for summary not for analysis
-  * pre_fev1fvc:   ratio of fev1 and fvc (fev1/fvc)
-  * fev1_pp:       fev1 percent predicted
+  * __`pre_fev1fvc`__:   ratio of fev1 and fvc (fev1/fvc)
+  * __`fev1_pp`__:       fev1 percent predicted
 
 
 ###  
