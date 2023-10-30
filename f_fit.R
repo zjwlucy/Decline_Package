@@ -40,7 +40,15 @@
         }
       
       
-     ## -------------------   
+     ## ------------------------------------------------------------   
+     ## plots & tables based on dataset WITHOUT genetic information
+     ## Using data BEFORE removing missing values  
+     ## Assuming that no missing PFTs
+        s_table <- check_data(dat=dat, covars2=covars_common, snpi=NULL, summarize=TRUE, cohort_name=cohort)  
+
+          
+     ## ------------------------------------------------------------  
+     ## Fit model
         all_gmmat <- NULL
         all_gee   <- NULL
         for(tmpSNP in l_rs){
@@ -50,7 +58,7 @@
           print("#############################")
         
           # checking and cleaning the data
-            d1 <- check_data(dat=dat, covars2=covars_common, snpi=tmpSNP)   
+            d1 <- check_data(dat=dat, covars2=covars_common, snpi=tmpSNP, summarize=FALSE)   
             d2 <- d_slope(d1)                           # Full slope data
             d3 <- d_slope(d1,firstlast=T)               # single slope data where slope = (last-first)/(time interval)
  
@@ -66,19 +74,7 @@
             all_gee <- rbind(all_gee, tmp_gee)      
         }
 
-
-
-
-     ## ------------------------------------------------------------   
-     ## plots & tables based on dataset WITHOUT genetic information
-        d_pheno <- check_data(dat=dat, covars2=covars_common, snpi=NULL)  
-        
-        s_table <- f_tables(dat=d_pheno, multiRace=data_multiRace)
-        f_plots(d_pheno, cohort_name=cohort)
-        
-
-
-      
+              
       
      ## -------------------   
      ## save output 

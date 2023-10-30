@@ -199,7 +199,7 @@
 ## example code: SNP rs507211
 
 ## checking and cleaning the data
- #  d1_test <- check_data(dat=d, covars2=covars_common, snpi="rs507211")   
+ #  d1_test <- check_data(dat=d, covars2=covars_common, snpi="rs507211", summarize=F)   
  #  d2_test <- d_slope(d1_test)                           # Full slope data
  #  d3_test <- d_slope(d1_test,firstlast=T)               # single slope data where slope = (last-first)/(time interval)
  

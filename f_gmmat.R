@@ -49,13 +49,37 @@
         fixed$p <- 2*pnorm(abs(fixed$V1/fixed$V2), lower.tail = F)       
         colnames(fixed) <- c("Estimate", "SE", "t", "pvalue") 
                 
-  
-      #
-        if(is.null(m_group)){ m_group <- "NONE" }
+      # get estimates for variance components
+      # For lm:
+      # kmat group
+      #  T    T
+      #  F    F
+      
+      # For LME
+      # kmat group
+      #  T    T
+      #  F    T
+        if(modeltypei == "lm" & is.null(kmati)){  names(m_gmmat$theta) <- "0" }  # no random & group specific variance estimate
+        vars_info <- data.frame(matrix(vector(), 11, 0,
+                                dimnames=list(c("0", "1", "2", 
+                                              "kins1.var.intercept", "kins2.var.intercept", 
+                                              "kins1.var.slope", "kins2.var.slope",
+                                              "kins1.cov.intercept.slope", "kins2.cov.intercept.slope",
+                                              "kins1", "kins2"), c()) ),
+                                stringsAsFactors=F)
+        vars_info$var_name <- rownames(vars_info)
+        vars_i             <- data.frame(m_gmmat$theta)
+        vars_i$var_name    <- rownames(vars_i)
+        vars_info          <- merge(vars_info, vars_i, by = "var_name", all.x=T) 
+        vars_info$var_name <- paste0("V_", vars_info$var_name)
+        
+      #        
+        if(is.null(m_group)){  m_group <- "NONE"  }        
         s           <- cbind(modeltypei, modeli, length(m_gmmat$Y), length(unique(m_gmmat$id_include)), rownames(fixed), fixed, 
-                             timei[2], timei[3], use_kmat, m_id, m_group)   
+                             timei[2], timei[3], use_kmat, m_id, m_group, 
+                             data.frame(t(matrix(vars_info$m_gmmat.theta, nrow=11, ncol=nrow(fixed))))  )   
         colnames(s) <- c("modeltype", "model", "n_obs", "n_uniq", "variable", "Estimate", "SE", "t", "pvalue", 
-                         "sys_time", "elapsed_time", "UseKinship", "m_id", "m_group") 
+                         "sys_time", "elapsed_time", "UseKinship", "m_id", "m_group", vars_info$var_name) 
            
    return(s)             
    }
@@ -113,13 +137,14 @@
             
            ## ------------------------          
            # (A) linear model using slope data (with only 1 observation per individual, no random slope)
-           #    (1) 1 observation, independent individuals  (ID=IID, no kmat, no slope)   we cannot use m_group="smoking_status_base"
-           #    (2) 1 observation, related individuals  (ID=IID, kmat, no slope)    ????do we need m_group="smoking_status_base"
+           #    (1) 1 observation, independent individuals  (ID=IID, no kmat, no slope)   we cannot use m_group="smoking_status_base" when no kmat
+           #    (2) 1 observation, related individuals      (ID=IID, kmat,    no slope)   ????do we need m_group="smoking_status_base"? Default is yes.
                 if(eqlist$variable[i] == "snp_s" & modeltypei == "lm"){  
                   
                    if(is.null(kmat)){ m_groupi <- NULL }else{ m_groupi <- "smoking_status_base" }            
                    m_tmp <- f_glmmkin(dat_slope_lm, modeli, eqi, rand_s=NULL, m_group=m_groupi, kmati=kmat, modeltypei=modeltypei)
-               
+            
+           # For LME, m_group will always be smoking status    
            # (B) lme model using slope data (multiple slopes as outcome, no random slope)  
                  }else if(eqlist$variable[i] == "snp_s" & modeltypei == "glmmkin"){              
                   m_tmp <- f_glmmkin(dat_slope, modeli, eqi, rand_s=NULL, kmati=kmat, modeltypei=modeltypei)
