@@ -25,20 +25,16 @@
          covars_all <- unique(covars_all)
          
        # other variables that are not used in the model
-         covars_extra <- c("pre_fev1fvc", "fev1_pp") 
-       
-       
-       # assign unique id for each observation (used for merging later)
-         dat       <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
-         dat$obsID <- 1:nrow(dat)
-         tmp       <- dat[, c("IID", "obsID", covars_extra)] 
+         covars_extra <- intersect(c("pre_fev1fvc", "fev1_pp"), colnames(dat)) 
          
-       
-       #(1) Missing covariates
-         if( sum(!(c(covars_all,covars_extra) %in% colnames(dat))) > 0 ){
-                   print("ERROR: missing covariates: ")
+       # assign unique id for each observation (used for merging later)  
+         dat$obsID <- 1:nrow(dat)
+          
+       #(1) Missing important covariates
+         if( sum(!( covars_all %in% colnames(dat)) ) > 0 ){
+                   print("ERROR: missing important covariates: ")
                    print( paste(covars_all[  !(covars_all   %in% colnames(dat))], collapse=",") )
-                   print( paste(covars_extra[!(covars_extra %in% colnames(dat))], collapse=",") )
+                   #print( paste(covars_extra[!(covars_extra %in% colnames(dat))], collapse=",") )
       
        #(2) Duplicated rows
          }else if( sum(duplicated(dat[,c("IID", "FID", "age")]),
@@ -59,6 +55,7 @@
                 n_iid   <- as.data.frame(table(dat$IID))
                 dat$IID <- rep(1:length(unique(dat$IID)), n_iid$Freq)    # check identical(dat$IID, rep(unique(dat$IID), n_iid$Freq))
             }
+               
           #  
             print(paste0("Total number of observations: ", nrow(dat), 
                          "; Number of unique individuals: ", length(unique(dat$IID)) )  )               
@@ -68,6 +65,9 @@
             dat$smoking_status_base<- as.character(dat$smoking_status_base)
             dat$sex                <- as.character(dat$sex)  
           
+            dat       <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
+            tmp       <- dat[, c("IID", "obsID", covars_extra)] 
+            
           
           ##----------------------------------------------------------------------  
           ## plots & tables based on dataset WITHOUT genetic information
@@ -106,11 +106,13 @@
                 
               # check changes in baseline
                 id_base <- which(dat$obsRank == 1)
-                check_baseline <- sum(all.equal(as.numeric(dat$age_baseline[id_base]), as.numeric(dat$age[id_base])), 
-                                      identical(dat$smoking_status_base[id_base],      dat$smoking_status[id_base]) )                     
+                check_baseline <- sum(is.logical(  all.equal(as.numeric(dat$age_baseline[id_base]), 
+                                                             as.numeric(dat$age[id_base]))  ), 
+                                      identical(dat$smoking_status_base[id_base],       dat$smoking_status[id_base])    )                     
                 if(check_baseline <2){ print("Warning: Baseline has changed after removing the missing values") }
+         
                 
-              #  
+              # ------------------------------------------------ 
                 dat <- dat[order(dat$FID, dat$IID, dat$age),]
                 print(paste0("Total number of observations after removing NAs: ", nrow(dat), 
                              "; Number of unique individuals: ", length(unique(dat$IID)))  )

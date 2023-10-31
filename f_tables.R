@@ -24,8 +24,13 @@
          dat      <- dat[order(dat$IID, dat$timefactor_spiro),]
          var_cont <- c("pre_fev1", "pre_fev1fvc", "fev1_pp", "age", "ht_baseline", "smoking_packyears_base")
          var_cat  <- c("sex", "smoking_status_base")  # "smoking_status"
-       
+         
          if(multiRace){   var_cat <- c(var_cat, "race")   }
+         
+      ## Take variables that are available from the data given    
+         var_cont <- intersect(var_cont, colnames(dat))
+         var_cat  <- intersect(var_cat,  colnames(dat))
+         
          
       ## add Rank for observations 
          dat_count <- lapply(unique(dat$IID), function(x){

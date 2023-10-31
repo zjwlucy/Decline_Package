@@ -8,10 +8,10 @@
 
 ## IID:                    individual ID (numeric)
 ## FID:                    family ID  (numeric)
-## pre_fev1:               FEV1           
+## pre_fev1:               FEV1 (mL)         
 ## SNPs:                   SNP information, column name MUST starts with lower case "rs", e.g. rs507211
 ## timefactor_spiro:       time since the baseline exam (in YEARS). At baseline, timefactor_spiro=0.
-## age:                    time-varying age
+## age:                    time-varying age (in YEARS)
 ## smoking_status:         time-varying smoking status (never=0, former=1, current=2); 
 
 ## Baseline 
