@@ -7,9 +7,9 @@
 ## covariates:
 
 ## IID:                    individual ID (numeric)
-## FID:                    family ID  (numeric)
-## pre_fev1:               FEV1 (mL)         
-## SNPs:                   SNP information, column name MUST starts with lower case "rs", e.g. rs507211
+## FID:                    family ID  (numeric); For unrelated individuals, create a column of the same number as "FID", e.g. a column of 1
+## pre_fev1:               FEV1 (in mL)         
+## SNPs:                   SNP information, column name MUST starts with the lower case "rs", e.g. rs507211, rsChrPosRefAlt
 ## timefactor_spiro:       time since the baseline exam (in YEARS). At baseline, timefactor_spiro=0.
 ## age:                    time-varying age (in YEARS)
 ## smoking_status:         time-varying smoking status (never=0, former=1, current=2); 
@@ -22,7 +22,7 @@
  # smoking_status_base:    baseline smoking status (never=0, former=1, current=2); Will be used as the grouping variable for glmmkin.
  
 ## Other cohort-specific variables.
- # race
+ # race (must be categorical)
  # PCs 
  # equipchange ......
 
