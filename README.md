@@ -4,7 +4,7 @@ Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MM
 
 
 ## Columns for data set 
-  * __`IID`__:                    individual ID (numeric)
+  * __`IID`__:                    Unique individual ID (numeric). Note: two different individuals CANNOT have the same IID
   * __`FID`__:                    family ID (numeric); For unrelated individuals, create a column of the same number as "FID", e.g. a column of 1
   * __`pre_fev1`__:               FEV1 (in mL)          
   * __`SNPs`__:                   SNP information, column name MUST starts with the lower case "rs", e.g. rs507211, rsChrPosRefAlt
