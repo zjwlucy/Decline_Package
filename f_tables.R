@@ -52,7 +52,7 @@
       # Sample size:  total obs (total unique individuals)
         a_n <- paste0(nrow(dat), " (", length(unique(dat$IID)), ")")
         
-      # Time: average duration of the follow up: (Last - Baseline) = max(timefactor_spiro)  # d2 <- dat %>%group_by(IID)%>%slice(n()) 
+      # Time: average of the total follow up duration: (Last-Baseline)=max(timefactor_spiro)  # d2 <- dat %>%group_by(IID)%>%slice(n()) 
         d_follow <- lapply(unique(dat$IID), function(x){
                            tmp  <- max(dat$timefactor_spiro[which(dat$IID == x)])
                            tmax <- c(x, tmp)
@@ -73,7 +73,7 @@
         a_time <- as.data.frame(a_time)
        
         a_n$variable    <- "N"
-        a_time$variable <- c("followup_duration", "followup_duration_exclude_IndWith1Visit") 
+        a_time$variable <- c("TotalFollowUp", "TotalFollowUp_exclude_IndWith1Visit") 
                 
         colnames(a_n)    <- c("value", "variable")
         colnames(a_time) <- c("value", "variable") 
