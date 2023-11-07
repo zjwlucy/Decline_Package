@@ -21,7 +21,7 @@
     tryCatch({      
          
       ## variables need to be summarized 
-         dat      <- dat[order(dat$IID, dat$timefactor_spiro),]
+         dat      <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
          var_cont <- c("pre_fev1", "pre_fev1fvc", "fev1_pp", "age", "ht_baseline", "smoking_packyears_base")
          var_cat  <- c("sex", "smoking_status_base")  # "smoking_status"
          
@@ -49,22 +49,37 @@
          
             
       ##----------------------------------------------------------        
-      # sample size:  total obs (total unique individuals)
-      # time: needs to be summarized using the longitudinal data not the baseline data       
-        a_n    <- paste0(nrow(dat), " (", length(unique(dat$IID)), ")")
-        a_time <- paste0( round(mean(dat$timefactor_spiro, na.rm = T), digits = 1), " (", round(sd(dat$timefactor_spiro,na.rm = T), digits = 1), ") ") 
-       
+      # Sample size:  total obs (total unique individuals)
+        a_n <- paste0(nrow(dat), " (", length(unique(dat$IID)), ")")
+        
+      # Time: average duration of the follow up: (Last - Baseline) = max(timefactor_spiro)  # d2 <- dat %>%group_by(IID)%>%slice(n()) 
+        d_follow <- lapply(unique(dat$IID), function(x){
+                           tmp  <- max(dat$timefactor_spiro[which(dat$IID == x)])
+                           tmax <- c(x, tmp)
+                          })   # 3258
+        d_follow <- as.data.frame(do.call(rbind, d_follow))
+        colnames(d_follow) <- c("IID", "t")
+         
+        a_time <- rbind(
+                  # follow up time for ALL individuals
+                    paste0( round(mean(d_follow$t, na.rm = T), digits = 1), 
+                        " (", round(sd(d_follow$t,na.rm = T), digits = 1), ") "),
+                  # follow up time excluding individuals with only 1 visit      
+                    paste0( round(mean(d_follow$t[which(d_follow$t>0)], na.rm = T), digits = 1), 
+                        " (", round(sd(d_follow$t[which(d_follow$t>0)],na.rm = T), digits = 1), ") ")  
+                        )
+        
         a_n    <- as.data.frame(a_n)
         a_time <- as.data.frame(a_time)
        
         a_n$variable    <- "N"
-        a_time$variable <- "time"
-        
+        a_time$variable <- c("followup_duration", "followup_duration_exclude_IndWith1Visit") 
+                
         colnames(a_n)    <- c("value", "variable")
         colnames(a_time) <- c("value", "variable") 
        
-        a_n$types    <- "sample_size"
-        a_time$types <- "continuous_long" 
+        a_n$types    <- "sample_size_Total(Unique)"
+        a_time$types <- rep("continuous_BaseToLast",2)
        
        
       ##----------------------------------------------------------- 
@@ -78,7 +93,7 @@
           a_pft           <- as.data.frame(a_pft)
           a_pft$variable  <- "N_pft"  
           colnames(a_pft) <- c("value", "variable")
-          a_pft$types     <- "count"              
+          a_pft$types     <- "count_pft(min,max)"              
            
         #                                                         
           a_cont <- apply(dat_base[, var_cont], 2, function(x)  

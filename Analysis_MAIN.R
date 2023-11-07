@@ -6,7 +6,7 @@
 ## https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MMH9wfZikHFWfLRQGKtw/edit#
 ## covariates:
 
-## IID:                    individual ID (numeric)
+## IID:                    Unique individual ID (numeric). Note: two different individuals CANNOT have the same IID
 ## FID:                    family ID  (numeric); For unrelated individuals, create a column of the same number as "FID", e.g. a column of 1
 ## pre_fev1:               FEV1 (in mL)         
 ## SNPs:                   SNP information, column name MUST starts with the lower case "rs", e.g. rs507211, rsChrPosRefAlt

@@ -27,7 +27,7 @@ f_plots <- function(dat, cohort_name){
         
         p2 <- ggplot(data = r100, aes(x = timefactor_spiro,  y = pre_fev1, col = factor(IID)) ) +
                      viridis::scale_color_viridis(discrete = TRUE,option = "viridis") + 
-                     geom_line(alpha = 0.32) + theme_minimal() + 
+                     geom_line(alpha = 0.6) + theme_minimal() + 
                      theme(legend.position="none", axis.text = element_text(size=30), axis.title = element_text(size=35) ) + 
                      labs(title = paste0(cohort_name," sample 100")) + xlab("Time (Years)") + ylab("FEV1") + ylim(0, 6000)
         
