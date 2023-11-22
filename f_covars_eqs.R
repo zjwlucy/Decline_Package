@@ -49,9 +49,14 @@
           covars_common <- covars_common[ !(covars_common %in% c("htBaseCenteredSq"))  ]
           covars_common <- c(covars_common, others, "smoking_status_base")
         
+        #
+          rs_want <- c("rs682254",    "rs507211",   "rs10502207", "rs3741240", "rs4304998", "rs8040868",
+                       "rs112409184", "rs4077833",  "rs10938125", "rs6537292", "rs114923365", 
+                       "rs2070600",   "rs34712979", "rs7733410")
+        
         #  
-          covars_list   <- list(covars_for_eq, covars_common)
-          names(covars_list) <- c("covars_for_eq", "covars_common")
+          covars_list   <- list(covars_for_eq, covars_common, rs_want)
+          names(covars_list) <- c("covars_for_eq", "covars_common", "rs_want")
   return(covars_list)     
   }
 

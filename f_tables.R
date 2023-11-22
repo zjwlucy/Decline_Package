@@ -28,8 +28,8 @@
          if(multiRace){   var_cat <- c(var_cat, "race")   }
          
       ## Take variables that are available from the data given    
-         var_cont <- intersect(var_cont, colnames(dat))
-         var_cat  <- intersect(var_cat,  colnames(dat))
+         var_cont <- base::intersect(var_cont, colnames(dat))
+         var_cat  <- base::intersect(var_cat,  colnames(dat))
          
          
       ## add Rank for observations 

@@ -107,7 +107,7 @@
   covars        <- f_covars(others=covars_cohort,multiRace=data_multiRace)
   covars_for_eq <- covars$covars_for_eq        # use for fitting models
   covars_common <- covars$covars_common        # use for checking data
-
+  variants_list <- covars$rs_want              # list of selected SNPs
 
 
 
@@ -124,7 +124,7 @@
 
 
 ## fit ALL the models for ALL SNPs but do not save the output
-   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq, 
+   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq, rs_want=variants_list,
                    data_related=data_related,
                    saveOutput=FALSE)
 
@@ -132,12 +132,12 @@
 
 ## Model using SNP
 ## fit ALL the models for ALL SNPs and save SNP-related output to the csv file "Cohort_(GEE/GMMAT)_partial_2023.csv"
-   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq, 
+   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq, rs_want=variants_list,
                    data_related=data_related, 
                    saveOutput=TRUE, cohort=cohortname)
    
 ## fit ALL the models and save all the results to the csv file "Cohort_(GEE/GMMAT)_allresults_2023.csv"
-   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq,
+   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq, rs_want=variants_list,
                    data_related=data_related,
                    saveOutput=TRUE, cohort=cohortname, allresults=TRUE)
   
@@ -145,12 +145,12 @@
    
 ## Base model  
 ## fit ALL the BASE models without SNPs and save smoking_status-related output to the csv file "Cohort_(GEE/GMMAT)_partial_base_2023.csv"
-   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq,
+   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq, 
                    data_related=data_related,
                    saveOutput=TRUE, cohort=cohortname, BaseModel=TRUE, voi="smoking_status")
   
 ## fit ALL the BASE models without SNPs and save all the output to the csv file "Cohort_(GEE/GMMAT)_allresults_base_2023.csv"
-   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq,
+   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq, 
                    data_related=data_related,
                    saveOutput=TRUE, cohort=cohortname, BaseModel=TRUE, voi="smoking_status", allresults=TRUE)
 
@@ -161,12 +161,12 @@
 ## Model with only main effect of SNP (no interaction term: SNP*time)
 
 ## Save SNP related results:
-   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq,
+   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq, rs_want=variants_list,
                    data_related=data_related,
                    saveOutput=TRUE, cohort=cohortname, SNPmainOnly=TRUE)
    
 ## Save all results:   
-   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq, 
+   output <- f_fit(dat=d, covars_common=covars_common, covars_for_eq=covars_for_eq, rs_want=variants_list,
                    data_related=data_related,
                    saveOutput=TRUE, cohort=cohortname, SNPmainOnly=TRUE, allresults=TRUE)
 

@@ -25,7 +25,7 @@
          covars_all <- unique(covars_all)
          
        # other variables that are not used in the model
-         covars_extra <- intersect(c("pre_fev1fvc", "fev1_pp"), colnames(dat)) 
+         covars_extra <- base::intersect(c("pre_fev1fvc", "fev1_pp"), colnames(dat)) 
          
        # assign unique id for each observation (used for merging later)  
          dat$obsID <- 1:nrow(dat)
@@ -50,12 +50,25 @@
 
        #(4) Proceed to next step
          }else{
+         
+            dat <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
+            if( length(grep("\\D", dat$FID)) > 0){ 
+                print("WARNING: FID is not numeric, recreating the new FID")
+                #n_fid   <- as.data.frame(table(dat$FID))
+                #dat$FID <- rep(1:length(unique(dat$FID)), n_fid$Freq)  
+                n_fid   <- data.frame(FID=unique(dat$FID), new_fid=1:length(unique(dat$FID)) )
+                dat     <- merge(dat, n_fid, by="FID", all.x=T) 
+                dat$FID <- dat$new_fid
+            }
             if( length(grep("\\D", dat$IID)) > 0){ 
                 print("WARNING: IID is not numeric, recreating the new IID")
-                n_iid   <- as.data.frame(table(dat$IID))
-                dat$IID <- rep(1:length(unique(dat$IID)), n_iid$Freq)    # check identical(dat$IID, rep(unique(dat$IID), n_iid$Freq))
+                #n_iid   <- as.data.frame(table(dat$IID))
+                #dat$IID <- rep(1:length(unique(dat$IID)), n_iid$Freq)    # check identical(dat$IID, rep(unique(dat$IID), n_iid$Freq))
+                n_iid   <- data.frame(IID=unique(dat$IID), new_iid=1:length(unique(dat$IID)) )
+                dat     <- merge(dat, n_iid, by="IID", all.x=T)
+                dat$IID <- dat$new_iid 
             }
-               
+  
           #  
             print(paste0("Total number of observations: ", nrow(dat), 
                          "; Number of unique individuals: ", length(unique(dat$IID)) )  )               
@@ -109,7 +122,7 @@
                 check_baseline <- sum(is.logical(  all.equal(as.numeric(dat$age_baseline[id_base]), 
                                                              as.numeric(dat$age[id_base]))  ), 
                                       identical(dat$smoking_status_base[id_base],       dat$smoking_status[id_base])    )                     
-                if(check_baseline <2){ print("Warning: Baseline has changed after removing the missing values") }
+                if(check_baseline <2){ print("WARNING: Baseline has changed after removing the missing values") }
          
                 
               # ------------------------------------------------ 

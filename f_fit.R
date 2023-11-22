@@ -30,15 +30,22 @@
   # saveOutput  (T/F): TRUE = save model results to csv and rdata file
   # allresults  (T/F): TRUE = save all the estimates for all variables (including those that we are not interested in)
   # SNPmainOnly (T/F): TRUE = remove the interaction term for SNP*time and SNP*age, only include main effect of SNP
-  f_fit <- function(dat, covars_common, covars_for_eq, data_related,
+  f_fit <- function(dat, covars_common, covars_for_eq, rs_want=NULL, data_related,
                     BaseModel=FALSE, voi=NULL, saveOutput=FALSE, allresults=FALSE, cohort="CohortName", SNPmainOnly=FALSE){
       
+        l_rs <- colnames(dat)[grep("^rs", colnames(dat))] 
         if(BaseModel){
               l_rs <- voi                                    # for non-SNP variables
+        }else if(length(l_rs) == 0){
+              stop("Error: missing SNP columns")
         }else{ 
-              l_rs <- colnames(dat)[grep("^rs", colnames(dat))] 
+              if( sum(rs_want %in% l_rs) < length(rs_want) ){
+                  print("WARNING: missing some SNP columns")
+                  l_rs <- base::intersect(l_rs, rs_want)
+              }else{
+                  l_rs <- rs_want
+              }              
         }
-      
       
      ## ------------------------------------------------------------   
      ## plots & tables based on dataset WITHOUT genetic information
