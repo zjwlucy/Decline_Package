@@ -1,6 +1,18 @@
 # Decline_Package
-Analysis plan on:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MMH9wfZikHFWfLRQGKtw/edit#
 
+## Background
+Identifying factors that affect decline in lung function is of critical interest in lung disease.  These factors may be identified in a range of cohorts (population-based and diseased), across a range of intervals of follow-up and time scales (months to decades), with environmental or genetic predictors, and using varying statistical models (simple slope, random intercept, random slope, stratified analysis).  While substantial work has been done on other longitudinal phenotypes, the non-linear decline in lung function and variability in spirometry measurements have posed significant challenges for accurate statistical modeling. The optimal statistical approach to detect genetic variants and other factors associated with pulmonary function decline that retains Type 1 and Type 2 error is unknown, particularly in the setting of omic-scale predictors where detection of small effect sizes in large samples may be particularly sensitive to bias. The goal of this research project is to identify robust models for studying factors influencing lung function decline across multiple cohorts.  Secondary goals are to identify sources of heterogeneity in analysis of factors of decline, and to provide a foundation for modeling for future omics data including polygenic risk scores.
+
+### Aims
+1) develop a population of simulated spirometry data with a) autocorrelation, estimated from real world data, b) four groups representing normal, lower baseline, rapid decline, and lower baseline and rapid decline and c) both linear and quadratic decline 2) (this code package): test a set of models in real world data: a) simple slope models; b) LMM with random intercept, slope, or both; c) GEE; d) age, time; e) quadratic or linear terms (for underlying linear or quadratic decline). We will look at the effects of smoking (as a positive control), and selected SNPs.
+
+### Authorship
+Anticipate up to 4 per cohort, with additional as required for writing / analysis.
+
+### Methods
+Prepare cohort dataset as requested below. We require pre_fev1 in mL, age, sex, height, race, smoking status, pack-years,  SNP allele freq, fev1pp (can use GLI global, or can use what has been previously calculated for your cohort), fev1/fvc ratio;  follow up time, number of visits. We anticipate that the dataset will be clean; i.e. with minimal missingness, subjects with existing longitudinal data (>= 2 time points, smoking data), removal of erroneous data (i.e. QC’d spirometry and identification of spurious outliers). Large discrepancies in sample size in models / baseline characteristics will be assessed, and if necessary, request to re-prepare the datasets. We selected 12 SNPs: 6 from prior GWAS (COPD, lung function, or lung function decline) and 6 proxies (null control).
+
+Further details on the project are here:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MMH9wfZikHFWfLRQGKtw/
 
 
 ## Columns for data set 
