@@ -34,18 +34,29 @@
                     BaseModel=FALSE, voi=NULL, saveOutput=FALSE, allresults=FALSE, cohort="CohortName", SNPmainOnly=FALSE){
       
         l_rs <- colnames(dat)[grep("^rs", colnames(dat))] 
+        
+      # 1) Base model without SNPs 
         if(BaseModel){
-              l_rs <- voi                                    # for non-SNP variables
-        }else if(length(l_rs) == 0){
-              stop("Error: missing SNP columns")
-        }else{ 
+           l_rs <- voi                                    # for non-SNP variables
+              
+      # 2) Model with SNPs
+        }else{
+           
+           if(length(l_rs) == 0){  # Missing SNP columns
+              stop("ERROR: missing SNP columns")
+         
+           }else if( sum(rs_want %in% l_rs) > 0 ){  # Have SNPs that are pre-selected
+              
               if( sum(rs_want %in% l_rs) < length(rs_want) ){
-                  print("WARNING: missing some SNP columns")
-                  l_rs <- base::intersect(l_rs, rs_want)
-              }else{
-                  l_rs <- rs_want
-              }              
+                      print("WARNING: missing some SNP columns")
+                      l_rs <- base::intersect(l_rs, rs_want)
+              }else{  l_rs <- rs_want  } 
+             
+           }else{ # Do not have SNPs that are pre-selected  
+             print("WARNING: missing all pre-selected SNPs; fitting models on SNPs that are presented in the data")
+           }
         }
+
       
      ## ------------------------------------------------------------   
      ## plots & tables based on dataset WITHOUT genetic information

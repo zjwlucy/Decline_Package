@@ -38,12 +38,31 @@
                  timei  <- system.time({  m_gee <- geeglm(eqi, id=IID, corstr="unstructured", data=dat)  })    
              }
              
+           # calculate MAF 
+              haveSNP <- grepl("^rs", colnames(m_gee$geese$X))
+              if( sum(haveSNP)>0 ){
+        
+                 haveSNP <- colnames(m_gee$geese$X)[haveSNP]
+                 haveSNP <- haveSNP[!grepl(":", haveSNP)]   # remove interaction terms
+                 mafi    <- lapply(unique(m_gee$geese$id), function(x){ unique(dat[which(dat$IID == x), haveSNP]) } )
+                 
+                 if( sum(unlist(  lapply(mafi, function(x){length(x)>1})  )) >0 ){
+                     stop("ERROR: SNP variable is time varying")
+                 }else{
+                     mafi <- unlist(mafi)
+                     mafi <- sum(mafi)/(2*length(mafi))
+                     mafi <- min(mafi, 1-mafi)
+                 } 
+              }else{ 
+                 mafi <- NA
+              }         
+              
            # 
              s <- as.data.frame(summary(m_gee)$coefficients)
              s <- cbind(modeltypei, modeli, dim(dat)[1], length(unique(dat$IID)), rownames(s), s, 
-                        QIC(m_gee)[1], as.numeric(timei["sys.self"]), as.numeric(timei["elapsed"]), m_id, relatedi)
+                        mafi, QIC(m_gee)[1], as.numeric(timei["sys.self"]), as.numeric(timei["elapsed"]), m_id, relatedi)
              colnames(s) <- c("modeltype", "model", "n_obs", "n_uniq", "variable", "Estimate", "SE", "Wald", "pvalue",
-                              "QIC", "sys_time", "elapsed_time", "m_id","related")
+                              "MAF", "QIC", "sys_time", "elapsed_time", "m_id","related")
 
    return(s)
    }

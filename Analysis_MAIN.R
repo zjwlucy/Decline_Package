@@ -109,6 +109,8 @@
   covars_common <- covars$covars_common        # use for checking data
   variants_list <- covars$rs_want              # list of selected SNPs
 
+# check if your dataset has all the selected SNPs 
+  variants_list
 
 
 ##############################################################  

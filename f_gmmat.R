@@ -49,6 +49,25 @@
         fixed$p <- 2*pnorm(abs(fixed$V1/fixed$V2), lower.tail = F)       
         colnames(fixed) <- c("Estimate", "SE", "t", "pvalue") 
                 
+      # calculate MAF
+        haveSNP <- grepl("^rs", colnames(m_gmmat$X))
+        if( sum(haveSNP)>0 ){
+        
+           haveSNP <- colnames(m_gmmat$X)[haveSNP]
+           haveSNP <- haveSNP[!grepl(":", haveSNP)]   # remove interaction terms
+           mafi    <- lapply(unique(m_gmmat$id_include), function(x){ unique(dat[which(dat$IID == x), haveSNP]) } )
+           
+           if( sum(unlist(  lapply(mafi, function(x){length(x)>1})  )) >0 ){
+               stop("ERROR: SNP variable is time varying")
+           }else{
+               mafi <- unlist(mafi)
+               mafi <- sum(mafi)/(2*length(mafi))
+               mafi <- min(mafi, 1-mafi)
+           } 
+        }else{ 
+           mafi <- NA
+        }         
+                
       # get estimates for variance components
       # For lm:
       # kmat group
@@ -76,10 +95,10 @@
       #        
         if(is.null(m_group)){  m_group <- "NONE"  }        
         s           <- cbind(modeltypei, modeli, length(m_gmmat$Y), length(unique(m_gmmat$id_include)), rownames(fixed), fixed, 
-                             timei[2], timei[3], use_kmat, m_id, m_group, 
+                             mafi, as.numeric(timei["sys.self"]), as.numeric(timei["elapsed"]), use_kmat, m_id, m_group, 
                              data.frame(t(matrix(vars_info$m_gmmat.theta, nrow=11, ncol=nrow(fixed))))  )   
         colnames(s) <- c("modeltype", "model", "n_obs", "n_uniq", "variable", "Estimate", "SE", "t", "pvalue", 
-                         "sys_time", "elapsed_time", "UseKinship", "m_id", "m_group", vars_info$var_name) 
+                         "MAF", "sys_time", "elapsed_time", "UseKinship", "m_id", "m_group", vars_info$var_name) 
            
    return(s)             
    }
