@@ -15,6 +15,9 @@ Prepare cohort dataset as requested below. We require pre_fev1 in mL, age, sex, 
 If you have related individuals, please reach out to Jingwen.
 Errors particularly with GEE model 13 are known, the software will continue to run. 
 
+### Results
+All result files will be added to the source folder.
+Please zip/tar/etc with filename cohort_date.zip and send to Jingwen and Matt Moll (remol@channing.harvard.edu)
 Further details on the project are here:  https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MMH9wfZikHFWfLRQGKtw/
 
 
