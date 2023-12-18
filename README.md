@@ -4,7 +4,8 @@
 The optimal approaches to study lung function decline, particularly in the setting of omic-scale predictors, are not known. The goal of this research project is to test different statistical models (e.g. slope, GEE, GLM) in simulated and real world cohorts (population and case-control) to compare Type 1 and Type 2 error, identify factors leading to heterogeneity, and to provide a foundation for modeling for future omics data.
 
 ### Aims
-1) develop a population of simulated spirometry data with a) autocorrelation, estimated from real world data, b) four groups representing normal, lower baseline, rapid decline, and lower baseline and rapid decline and c) both linear and quadratic decline 2) (this code package): test a set of models in real world data: a) simple slope models; b) LMM with random intercept, slope, or both; c) GEE; d) age, time; e) quadratic or linear terms (for underlying linear or quadratic decline). We will look at the effects of smoking (as a positive control), and selected SNPs.
+1. develop a population of simulated spirometry data with a) autocorrelation, estimated from real world data, b) four groups representing normal, lower baseline, rapid decline, and lower baseline and rapid decline and c) both linear and quadratic decline
+2. (this code package): test a set of models in real world data: a) simple slope models; b) LMM with random intercept, slope, or both; c) GEE; d) age, time; e) quadratic or linear terms (for underlying linear or quadratic decline). We will look at the effects of smoking (as a positive control), and selected SNPs.
 
 ### Authorship
 Anticipate up to 4 per cohort, with additional as required for writing / analysis.
