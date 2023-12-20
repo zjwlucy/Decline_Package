@@ -32,7 +32,15 @@
   # SNPmainOnly (T/F): TRUE = remove the interaction term for SNP*time and SNP*age, only include main effect of SNP
   f_fit <- function(dat, covars_common, covars_for_eq, rs_want=NULL, data_related,
                     BaseModel=FALSE, voi=NULL, saveOutput=FALSE, allresults=FALSE, cohort="CohortName", SNPmainOnly=FALSE){
+       
+      # create output folder 
+        outfolder <- "decline_package_output"
+        if(!dir.exists(outfolder)){
+            print("Creating output folder") 
+            dir.create(outfolder, recursive = TRUE)
+        }
       
+      #
         l_rs <- colnames(dat)[grep("^rs", colnames(dat))] 
         
       # 1) Base model without SNPs 
@@ -101,17 +109,17 @@
       
         if(saveOutput){
           if(BaseModel){
-                write.csv(all_gmmat, file=paste0(cohort, "_GMMAT_",  fullresults,"_base_2023.csv"), row.names = F)   
-                write.csv(all_gee,   file=paste0(cohort, "_GEE_",    fullresults,"_base_2023.csv"), row.names = F)
-                save(all_models,     file=paste0(cohort, "_summary_",fullresults,"_base_2023.rdata") )
+                write.csv(all_gmmat, file=paste0(outfolder, "/", cohort, "_GMMAT_",  fullresults,"_base_2023.csv"), row.names = F)   
+                write.csv(all_gee,   file=paste0(outfolder, "/", cohort, "_GEE_",    fullresults,"_base_2023.csv"), row.names = F)
+                save(all_models,     file=paste0(outfolder, "/", cohort, "_summary_",fullresults,"_base_2023.rdata") )
         
           }else{
                 SNPeffect <- ifelse(SNPmainOnly, "SNPmain_", "")
-                write.csv(all_gmmat, file=paste0(cohort, "_GMMAT_",  fullresults,"_", SNPeffect, "2023.csv"), row.names = F)    
-                write.csv(all_gee,   file=paste0(cohort, "_GEE_",    fullresults,"_", SNPeffect, "2023.csv"), row.names = F)
-                save(all_models,     file=paste0(cohort, "_summary_",fullresults,"_", SNPeffect, "2023.rdata") )
+                write.csv(all_gmmat, file=paste0(outfolder, "/", cohort, "_GMMAT_",  fullresults,"_", SNPeffect, "2023.csv"), row.names = F)    
+                write.csv(all_gee,   file=paste0(outfolder, "/", cohort, "_GEE_",    fullresults,"_", SNPeffect, "2023.csv"), row.names = F)
+                save(all_models,     file=paste0(outfolder, "/", cohort, "_summary_",fullresults,"_", SNPeffect, "2023.rdata") )
           }
-          write.csv(s_table,   file=paste0(cohort, "_table_2023.csv"), row.names = F)                           
+          write.csv(s_table,   file=paste0(outfolder, "/", cohort, "_table_2023.csv"), row.names = F)                           
         }
       
       
