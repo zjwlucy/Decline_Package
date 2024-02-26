@@ -38,7 +38,6 @@ See project document for further details on the project.
   * __`smoking_status_base`__:    baseline smoking status (never=0, former=1, current=2); Will be used as the grouping variable for glmmkin.
      
 ### Other cohort-specific variables
-  * race (must be categorical)
   * PCs (PC1, PC2, ... ...) 
   * equipchange ......  
 
@@ -51,7 +50,8 @@ See project document for further details on the project.
 
   * Kinship matrix (for related data):   both row names and column names MUST be IID      
       
-
+## Note
+Cohorts with multiple racial groups should conduct race-stratified analyses.
 
 
 ## Required packages
