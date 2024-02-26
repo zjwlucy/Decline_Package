@@ -1,6 +1,6 @@
 # Decline_Package
 
-## Background
+## 1. Background
 The optimal approaches to study lung function decline, particularly in the setting of omic-scale predictors, are not known. The goal of this research project is to test different statistical models (e.g. slope, GEE, GLM) in simulated and real world cohorts (population and case-control) to compare Type 1 and Type 2 error, identify factors leading to heterogeneity, and to provide a foundation for modeling for future omics data.
 
 ### Aims
@@ -21,7 +21,7 @@ Please zip/tar/etc with filename cohort_date.zip and send to Jingwen (zjwlucy@bu
 See project document for further details on the project.
 
 
-## Columns for data set 
+## 2. Columns for data set 
   * __`IID`__:                    Unique individual ID (numeric). Note: two different individuals CANNOT have the same IID
   * __`FID`__:                    family ID (numeric); For unrelated individuals, create a column of the same number as "FID", e.g. a column of 1
   * __`pre_fev1`__:               FEV1 (in mL)          
@@ -53,7 +53,7 @@ See project document for further details on the project.
 **Cohorts with multiple racial groups should conduct race-stratified analyses.**
 
 
-## Required packages
+## 3. Required packages
 If the current version does not work, you can try previous version.
 Both versions should give the SAME output
 
@@ -73,5 +73,5 @@ Both versions should give the SAME output
    * ggplot2_3.3.2
    * kinship2 (optional) 
 
-## For analysis, use "Analysis_MAIN.R"
-Example code is included inside Analysis_MAIN.R as comments. Please make sure your dataset has all the columns that are mentioned in section **Columns for data set**.  
+## 4. For analysis, use "Analysis_MAIN.R"
+Example code is included inside Analysis_MAIN.R as comments. Please make sure your dataset has all the columns that are mentioned in section **2. Columns for data set**.  
