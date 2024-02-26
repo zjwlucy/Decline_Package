@@ -47,10 +47,9 @@ See project document for further details on the project.
 
 
 ###  
-
   * Kinship matrix (for related data):   both row names and column names MUST be IID      
       
-## Note
+### Note
 Cohorts with multiple racial groups should conduct race-stratified analyses.
 
 
