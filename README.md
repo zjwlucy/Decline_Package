@@ -54,10 +54,10 @@ See project document for further details on the project.
 
 
 ## Required packages
-If current version does not work, you can try previous version.
+If the current version does not work, you can try previous version.
 Both versions should give the SAME output
 
-### R version: R/4.2.1     (current version)
+### R version: R/4.2.1   (current version)
    * geepack_1.3.9
    * GMMAT_1.4.0 
    * dplyr_1.1.2  
@@ -74,3 +74,4 @@ Both versions should give the SAME output
    * kinship2 (optional) 
 
 ## For analysis, use "Analysis_MAIN.R"
+Example code is included inside Analysis_MAIN.R as comments. Please make sure your dataset has all the columns that are mentioned in section **Columns for data set**.  
