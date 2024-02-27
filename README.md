@@ -74,4 +74,29 @@ Both versions should give the SAME output
    * kinship2 (optional) 
 
 ## 4. For analysis, use "Analysis_MAIN.R"
-Example code is included inside Analysis_MAIN.R as comments. Please make sure your dataset has all the columns that are mentioned in section **2. Columns for data set**.  
+Example code is included inside Analysis_MAIN.R as comments. Please make sure your dataset has all the columns that are mentioned in **section 2. Columns for data set**.  
+
+Example data: 
+|IID	|FID|	pre_fev1|	timefactor_spiro|	age|	smoking_status|age_baseline|	…	|PC1|rs507211|	rs4077833|
+|----|---|---------|-----------------|----|---------------|------------|---|-----|--------|----------|
+|1	|1	 |2771	|0	 |50	|1	|50	|…	|-0.0293|0	|1|
+|1	|1	 |2500	|4	 |54	|1	|50	|…	|-0.0293|0	|1|
+|1	|1	 |2450	|10	|60	|1	|50	|…	|-0.0293|0	|1|
+|2	|11	|3510	|0	 |38	|0	|38	|…	|-0.0038|0	|2|
+|2	|11	|3450	|9	 |47	|0	|38	|…	|-0.0038|0	|2|
+|2	|11	|3320	|12	|50	|0	|38	|…	|-0.0038|0	|2|
+|2	|11	|3220	|17	|55	|0	|38	|…	|-0.0038|0	|2|
+|3	|24	|2570	|0	 |42	|2	|42	|…	| 0.0071|1	|0|
+|3	|24	|2600	|6	 |48	|2	|42	|…	| 0.0071|1	|0|
+|3	|24	|2540	|8	 |50	|2	|42	|…	| 0.0071|1	|0|
+
+
+Example Kinship matrix for 5 individuals (IID = 11,20,31,42,50):
+|IID |11	|20	|31	|42	|50|
+|---|-----|-----|-----|-----|-----|
+|**11**	|0.5	  |0	    |0.25	 |0.125	|0     |
+|**20**	|0	    |0.5	  |0.25	 |0.125	|0     |
+|**31**	|0.25 	|0.25	 |0.5	  |0.25	 |0.25  |
+|**42**	|0.125	|0.125	|0.25	 |0.5	  |0     |
+|**50**	|0	    |0	    |0.25	 |0	    |0.5   |
+
