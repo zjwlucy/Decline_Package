@@ -15,7 +15,7 @@ f_plots <- function(dat, cohort_name){
                      geom_line(alpha = 0.32) + theme_minimal() + 
                      theme(legend.position="none", axis.text = element_text(size=30), axis.title = element_text(size=35) ) + 
                      labs(title = cohort_name) + xlab("Time (Years)") + ylab("FEV1") + ylim(0, 6000)
-        png(paste0("decline_package_output/PLOTSP_", cohort_name, "_2023.png"), width=1000, height=850)
+        png(paste0("decline_package_output/PLOTSP_", cohort_name, "_2023.png"), width=1000, height=850, type="cairo")
             print(p1)
         dev.off()
 
@@ -31,7 +31,7 @@ f_plots <- function(dat, cohort_name){
                      theme(legend.position="none", axis.text = element_text(size=30), axis.title = element_text(size=35) ) + 
                      labs(title = paste0(cohort_name," sample 100")) + xlab("Time (Years)") + ylab("FEV1") + ylim(0, 6000)
         
-        png(paste0("decline_package_output/PLOTSP_", cohort_name, "_sample100_2023.png"), width=1000, height=850)
+        png(paste0("decline_package_output/PLOTSP_", cohort_name, "_sample100_2023.png"), width=1000, height=850, type="cairo")
             print(p2)
         dev.off()
 
