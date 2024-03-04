@@ -49,11 +49,12 @@ See project document for further details on the project.
 ###  
   * Kinship matrix (for related data):   both row names and column names MUST be IID      
       
-### Note
-**Cohorts with multiple racial groups should conduct race-stratified analyses.**
+## 3. Note
+  * Cohorts with multiple racial groups should conduct **race-stratified** analyses.
+  * If cohorts have only 3 repeated measurements per individual, you may encounter an error message for **GEE model 13** (e.g. something related to contrasting for variables with less than 2 levels). Please ignore this error, but kindly notify us and provide results for the remaining models.
 
 
-## 3. Required packages
+## 4. Required packages
 If the current version does not work, you can try previous version.
 Both versions should give the SAME output
 
@@ -73,7 +74,7 @@ Both versions should give the SAME output
    * ggplot2_3.3.2
    * kinship2 (optional) 
 
-## 4. For analysis, use "Analysis_MAIN.R"
+## 5. For analysis, use "Analysis_MAIN.R"
 Example code is included inside Analysis_MAIN.R as comments. Please make sure your dataset has all the columns that are mentioned in **section 2. Columns for data set**.  
 
 Example data: 
