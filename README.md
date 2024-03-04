@@ -51,7 +51,7 @@ See project document for further details on the project.
       
 ## 3. Note
   * Cohorts with multiple racial groups should conduct **race-stratified** analyses.
-  * If cohorts have only 3 repeated measurements per individual, you may encounter an error message for **GEE model 13** (e.g. something related to contrasting for variables with less than 2 levels). Please ignore this error, but kindly notify us and provide results for the remaining models.
+  * If cohorts have only 3 or less repeated measurements per individual, you may encounter an error message for **GEE model 13** (e.g. something related to contrasting for variables with less than 2 levels). If this error only occurs in GEE model 13, please ignore this error, but kindly notify us and provide results for the remaining models.
 
 
 ## 4. Required packages
