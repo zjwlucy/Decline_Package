@@ -1,0 +1,13 @@
+﻿snp_rsid,index_rsid,Snp_loc (b37),rationale
+rs682254,rs507211,11:107556022:T:G,Random proxy
+rs10502207,rs3741240,11:115469253:C:T,Random proxy
+rs4304998,rs8040868,15:39044250:G:A,Random proxy
+rs112409184,rs4077833,15:41457199:G:A,Random proxy
+rs10938125,rs6537292,4:75372553:C:G,Random proxy
+rs114923365,rs2070600,6:46640503:G:A,Random proxy
+rs3741240,rs3741240,11:62186542:G:A,CC16 - lead SNP (MR analysis lung fx decline)
+rs507211,rs507211,11:86376739:G:A,ME3 - lead for Tang with > 3 measurements
+rs8040868,rs8040868,15:78911181:T:C,"CHRNA5 - lead snp for COPD association, smoking behavior"
+rs4077833,rs4077833,15:81632683:G:C,IL16 - SNP Tang et al - see effect in different models
+rs6537292,rs6537292,4:145469968:G:T,HHIP - lead variant in largest GWAS meta-analysis for lung function
+rs2070600,rs2070600,6:32151443:C:T,"AGER - lead variant for lung function, also less common"
