@@ -42,8 +42,8 @@ See project document for further details on the project.
   * equipchange ......  
 
 ### Variables for summary not for analysis
-  * __`pre_fev1fvc`__:   ratio of fev1 and fvc (fev1/fvc)
-  * __`fev1_pp`__:       fev1 percent predicted
+  * __`pre_fev1fvc`__:   ratio of fev1 and fvc (fev1/fvc) as percentage (e.g., fev1/fvc=0.75, the value for this column will be 75)
+  * __`fev1_pp`__:       fev1 percent predicted (e.g., 92% as 92 not 0.92) 
 
 
 ###  
