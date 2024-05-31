@@ -33,11 +33,11 @@
              alleq1     <- sum(n_size$Freq == 1) == nrow(n_size)
              if(alleq1) { print("WARNING: dataset is not longitudinal, all individuals have only 1 observation") }
              
-           # If all individuals have (#obs < 3) or 90% of them have (#obs < 3),
+           # If all individuals have (#obs <= 3) or 90% of them have (#obs <= 3),
            # change unstructured to ar1
-             change_cor <- ( sum(n_size$Freq < 3) == nrow(n_size) | sum(n_size$Freq < 3) >= 0.90*nrow(n_size)  )
+             change_cor <- ( sum(n_size$Freq <= 3) == nrow(n_size) | sum(n_size$Freq <= 3) >= 0.90*nrow(n_size)  )
              
-             if(change_cor){  cor_str <- "ar1";  print("WARNING: observations per individual is < 3, changing corstr to AR1 for GEE")
+             if(change_cor){  cor_str <- "ar1";  print("WARNING: observations per individual is <= 3, changing corstr to AR1 for GEE")
              }else{           cor_str <- "unstructured"      }
             
           
