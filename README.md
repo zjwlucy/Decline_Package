@@ -52,7 +52,8 @@ See project document for further details on the project.
 ## 3. Important Note
   * Cohorts with multiple racial groups should conduct **race-stratified** analyses.
   * If cohorts have only 3 or less repeated measurements per individual, you may encounter an error message for **GEE model 13** (e.g. something related to contrasting for variables with less than 2 levels). If this error only occurs in GEE model 13, please ignore this error, but kindly notify us and provide results for the remaining models.
-  * Please check the files from the output folder "decline_package_output" to make sure that you have all the requested files and plots (plots are displayed normally). 
+  * Please check the files from the output folder "decline_package_output" to make sure that you have all the requested files and plots (plots are displayed normally).
+  * Please check if the **MAF** column from the csv output is close to what it is expected.
 
 ## 4. Required packages
 If the current version does not work, you can try previous version.
