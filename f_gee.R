@@ -24,18 +24,35 @@
 
    library(geepack)
    f_gee <- function(dat, modeli, eqi, relatedi, modeltypei=NULL){    
+                     
+           # if related, calculate the #obs by FID
+             if(relatedi){   n_size <- as.data.frame( table(dat$FID) )
+             }else{          n_size <- as.data.frame( table(dat$IID) )     }
+             
+           # check if the dataset is still a longitudinal data 
+             alleq1     <- sum(n_size$Freq == 1) == nrow(n_size)
+             if(alleq1) { print("WARNING: dataset is not longitudinal, all individuals have only 1 observation") }
+             
+           # If all individuals have (#obs < 3) or 90% of them have (#obs < 3),
+           # change unstructured to ar1
+             change_cor <- ( sum(n_size$Freq < 3) == nrow(n_size) | sum(n_size$Freq < 3) >= 0.90*nrow(n_size)  )
+             
+             if(change_cor){  cor_str <- "ar1";  print("WARNING: observations per individual is < 3, changing corstr to AR1 for GEE")
+             }else{           cor_str <- "unstructured"      }
+            
           
+           # -----------------------------------------------
            # related individuals (cluster on FID)
              if(relatedi){
                  m_id   <- "FID"
                  dat    <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
-                 timei  <- system.time({  m_gee <- geeglm(eqi, id=FID, corstr="unstructured", data=dat)  })          
+                 timei  <- system.time({  m_gee <- geeglm(eqi, id=FID, corstr=cor_str, data=dat)  })          
              
            # unrelated individuals (cluster on IID)
              }else{
                  m_id   <- "IID"
                  dat    <- dat[order(dat$IID, dat$timefactor_spiro),]
-                 timei  <- system.time({  m_gee <- geeglm(eqi, id=IID, corstr="unstructured", data=dat)  })    
+                 timei  <- system.time({  m_gee <- geeglm(eqi, id=IID, corstr=cor_str, data=dat)  })    
              }
              
            # calculate MAF 
@@ -79,7 +96,7 @@
 ## related:     does the data contain related or unrelated individuals
 ## all_results: whether to present coefficient for all 
 
-   fit_all_gee <- function(dat_full, dat_slope, eqlist, covars_additional=NULL, snpi, related, all_results=FALSE, SNP_mainOnly=FALSE){
+   fit_all_gee <- function(dat_full, dat_slope, snpi, eqlist, covars_additional=NULL, related, SNP_mainOnly=FALSE, all_results=FALSE){
        
        # ----------------------------  
          gee_out <- NULL 
@@ -93,21 +110,24 @@
                print( paste0("Fitting ", modeltypei, " model ", modeli) )
            
              ##  
-             # SNP main effect model or not
+             # (1) SNP main effect model or not
                if(SNP_mainOnly){ covarsi <- gsub("snp[*]timefactor_spiro", "snp, timefactor_spiro", covarsi)
                                  covarsi <- gsub("snp[*]age",              "snp, age",              covarsi) }
                          
-             # construct formula for specified SNP or variable
-               if(eqlist$variable[i] == "snp_s"  &  !grepl("^rs", snpi) ){
-                    covarsi <- gsub("snp_s", snpi, covarsi)     # for non-SNP variables
-               }else{
-                    covarsi <- gsub("snp", snpi, covarsi)       # for SNPs 
+             # (2) construct formula for specified SNP or variable
+               if(!grepl("^rs", snpi) && eqlist$variable[i] == "snp_s"){
+                                   covarsi <- gsub("snp_s",  snpi, covarsi)    # for non-SNP variables (base model) in slope models                  
+               }else if(!grepl("^rs", snpi) && modeli==3 ){  
+                                   covarsi <- gsub("snp[*]", "",   covarsi)    # for non-SNP variable (base model) from model 3
+               }else{              covarsi <- gsub("snp",    snpi, covarsi)    # for SNPs 
                }
-             # Remove the interaction with time for slope data: 
+               
+             # (3) Remove interaction terms with time for slope data: 
                if(eqlist$variable[i] == "snp_s"){
                   covars_additional <- gsub("[*]timefactor_spiro", "", covars_additional)
                }
-             #     
+               
+             # (4)     
                covarsi <- c(unlist(strsplit(covarsi, split = ", ")), covars_additional) 
                covarsi <- unique(covarsi)               
                covarsi <- paste(covarsi, collapse=" + ")

@@ -18,8 +18,9 @@
 
 
 ## 
-   check_data <- function(dat, covars2=NULL, snpi=NULL, summarize, cohort_name){    
+   check_data <- function(dat, covars2=NULL, snpi=NULL, summarize, cohort_name, rm_change_smk){    
        # basic covariates
+         if( !is.null(snpi) && snpi=="smk_status"){ snpi <- "smoking_status" }
          covars1    <- c("IID", "FID", "obsID", "pre_fev1", "timefactor_spiro", "age", "age_baseline", snpi) 
          covars_all <- c(covars1, covars2)   # additional covariates for model (eg: height, race, ......)
          covars_all <- unique(covars_all)
@@ -33,7 +34,7 @@
        #(1) Missing important covariates
          if( sum(!( covars_all %in% colnames(dat)) ) > 0 ){
                    print("ERROR: missing important covariates: ")
-                   print( paste(covars_all[  !(covars_all   %in% colnames(dat))], collapse=",") )
+                   print( paste(covars_all[  !(covars_all  %in% colnames(dat))], collapse=",") )
                    #print( paste(covars_extra[!(covars_extra %in% colnames(dat))], collapse=",") )
       
        #(2) Duplicated rows
@@ -50,16 +51,15 @@
 
        #(4) Proceed to next step
          }else{
-         
+          # 
             dat <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
             if( length(grep("\\D", dat$FID)) > 0){ 
-                print("WARNING: FID is not numeric, recreating the new FID")
-                #n_fid   <- as.data.frame(table(dat$FID))
-                #dat$FID <- rep(1:length(unique(dat$FID)), n_fid$Freq)  
+                print("WARNING: FID is not numeric, recreating the new FID") 
                 n_fid   <- data.frame(FID=unique(dat$FID), new_fid=1:length(unique(dat$FID)) )
                 dat     <- merge(dat, n_fid, by="FID", all.x=T) 
                 dat$FID <- dat$new_fid
             }
+            
             if( length(grep("\\D", dat$IID)) > 0){ 
                 print("WARNING: IID is not numeric, recreating the new IID")
                 #n_iid   <- as.data.frame(table(dat$IID))
@@ -81,6 +81,16 @@
             dat       <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
             tmp       <- dat[, c("IID", "obsID", covars_extra)] 
             
+          ## ------------- Adding new variable for smoking status 
+          ## add a variable indicate consistent smoking status & chaning status  
+          ## Note: assuming that missing smoking status will not change the results for consistent status
+             const_status <- f_consistent_smk(dat, rm_change_smk_i=FALSE)
+             dat          <- merge(dat, const_status, by="IID", all.x=T)                      
+             covars_all   <- c(covars_all, "smk_status")
+             #table(dat$smoking_status, dat$smk_status)
+          ## -------------
+          
+             
           
           ##----------------------------------------------------------------------  
           ## plots & tables based on dataset WITHOUT genetic information
@@ -94,6 +104,9 @@
                 
           ##----------------------------------------------------------------------                  
              }else{
+                if(rm_change_smk){ dat <- dat[which(dat$smk_status != "inconsistent"), ] 
+                                   print("WARNING: removing individuals with changing smoking status") }
+                     
                 dat                    <- na.omit(dat[, covars_all]) 
                 pft_count              <- as.data.frame(table(dat$IID))      # add number of pfts for each individual
                 colnames(pft_count)    <- c("IID", "n_pft")   
@@ -106,6 +119,24 @@
                 #dat$htBaseCenteredSq  <- ( dat$ht_baseline - mean(dat$ht_baseline[which(dat$timefactor_spiro == 0)], na.rm = T) )^2
                 #dat$htCenteredSq      <- ( dat$ht_cm       - mean(dat$ht_baseline[which(dat$timefactor_spiro == 0)], na.rm = T) )^2
               # ------------------------
+              
+              
+              # ------------------------ consistent smoking status 
+              # # check if smk_status changes after removing missing values
+              # !!!!!! smk_status (that are changing) may become consistent after removing missing values.
+                const_status           <- f_consistent_smk(dat, rm_change_smk_i=rm_change_smk)
+                colnames(const_status) <- c("IID", "smk_status_new")
+                dat                    <- merge(dat, const_status, by="IID", all.x=T)                           
+                #table(dat$smoking_status, dat$smk_status_new)
+                #table(dat$smk_status,     dat$smk_status_new)
+                
+                if(!identical(dat$smk_status, dat$smk_status_new)){
+                   print("WARNING: smoking status changes from inconsistent to consistent or losing 1 level")  
+                }
+                dat$smk_status <- dat$smk_status_new
+              # ------------------------ 
+                
+                         
                 
               # Record the order of each observation for each individuals
                 dat_count <- lapply(unique(dat$IID), function(x){
@@ -209,7 +240,7 @@
 
 ###################################################################### 
 ###################################################################### 
-## summarize & clean
+## summarize & clean & tools
    f_summary <- function(m_out, forwhich=NULL){
    
            #want  <- c(m_out$variable[grep("^rs", m_out$variable)])  # s$variable[grep(":", s$variable)]
@@ -218,7 +249,29 @@
             
    return(m_out) 
    }
-        
- 
+   
+   
+  
+## creating smoking variable for consistent status        
+   f_consistent_smk <- function(tmp_dat, rm_change_smk_i=FALSE){
+         tmp_status <- aggregate(smoking_status~IID, tmp_dat, 
+                                 FUN=function(x){ 
+                                     x               <- na.omit(x)
+                                     changing_status <- length(unique(x))
+                                     if(changing_status == 1){      return( unique(x) )
+                                     }else if(changing_status > 1){ return("inconsistent") }
+                                 })  
+       colnames(tmp_status) <- c("IID", "smk_status")                  
+       tmp_status$smk_status[which(tmp_status$smk_status == "0")] <- "consistent_none"
+       tmp_status$smk_status[which(tmp_status$smk_status == "1")] <- "consistent_former"
+       tmp_status$smk_status[which(tmp_status$smk_status == "2")] <- "consistent_current"
+       
+      #
+       if(rm_change_smk_i){ levelist <- c("consistent_none", "consistent_former", "consistent_current") 
+       }else{               levelist <- c("consistent_none", "consistent_former", "consistent_current", "inconsistent")} 
+       tmp_status$smk_status <- factor(tmp_status$smk_status, levels=levelist)
+             
+   return(tmp_status)
+   }
  
  

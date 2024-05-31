@@ -23,7 +23,7 @@
       ## variables need to be summarized 
          dat      <- dat[order(dat$FID, dat$IID, dat$timefactor_spiro),]
          var_cont <- c("pre_fev1", "pre_fev1fvc", "fev1_pp", "age", "ht_baseline", "smoking_packyears_base")
-         var_cat  <- c("sex", "smoking_status_base")  # "smoking_status"
+         var_cat  <- c("sex", "smoking_status_base", "smk_status")  # "smoking_status"
          
          if(multiRace){   var_cat <- c(var_cat, "race")   }
          
@@ -138,25 +138,3 @@
   }
 
 
-
-
-
-
-## ------------------------------------------------------------
-## Table 2: Simulations - pick top LMM and GEE models and compare to reference model (two time point model). Remainder of models in supplement
-
-# Columns, model, interaction term(s), random effects, null SNP (avg beta, avg p, % best model, % converged), low baseline SNP (avg beta, avg p, % best model, % converged), rapid decline SNP (avg beta, avg p, % best model, % converged).
-# Rows: age + time models 
-
-
-
-
-
-
-
-## ------------------------------------------------------------
-## Table 3: Top clinical covariate model in real cohorts + snp effects; compare to reference model of 2 time point model
-
-# Rank models by clinical covariate model. Show snp X time variable results for each cohort. Calculate avg AIC, avg computational time, and avg % converged.
-# Columns: models, covariates, FHS (snp X time, p), EC (snp X time, p), COPDGene (snp X time, p),...pooled cohorts (snp X time, p), avg AIC, avg computational time, avg % converged.
-# Rows: use covariate model as first row showing effect size of null snp X time, then show individual SNPs added to these.

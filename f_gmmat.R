@@ -31,7 +31,7 @@
 # IID: individual id
 
   library(GMMAT)
-  f_glmmkin <- function(dat, modeli, eqi, rand_s=NULL, m_id="IID", m_group="smoking_status_base", kmati=NULL, modeltypei=NULL){
+  f_glmmkin <- function(dat, modeli, eqi, rand_s=NULL, m_id="IID", m_group, kmati=NULL, modeltypei=NULL){
         use_kmat   <- FALSE
         if(!is.null(kmati)){  
           ids      <- rownames(kmati)[which(rownames(kmati) %in% dat$IID)]  
@@ -78,7 +78,7 @@
       # kmat group
       #  T    T
       #  F    T
-        if(modeltypei == "lm" & is.null(kmati)){  names(m_gmmat$theta) <- "0" }  # no random & group specific variance estimate
+        if(modeltypei == "lm" && is.null(kmati)){  names(m_gmmat$theta) <- "0" }  # no random & group specific variance estimate
         vars_info <- data.frame(matrix(vector(), 11, 0,
                                 dimnames=list(c("0", "1", "2", 
                                               "kins1.var.intercept", "kins2.var.intercept", 
@@ -115,10 +115,10 @@
 ## eqlist:      list of models to fit
 ## all_results: whether to present coefficient for all 
 
-   fit_all_gmmat <- function(dat_full, dat_slope, dat_slope_lm, eqlist, 
-                             covars_additional=NULL, snpi, kmat=NULL, all_results=FALSE, SNP_mainOnly=FALSE){
+   fit_all_gmmat <- function(dat_full, dat_slope, dat_slope_lm, eqlist, snpi, covars_additional=NULL,
+                             m_groupi, kmat=NULL, SNP_mainOnly=FALSE, all_results=FALSE){
    
-     # ----------------------------     
+     # -----------------------------------     
        gmmat_out <- NULL 
        for(i in 1:nrow(eqlist) ){ 
          tryCatch({      
@@ -132,21 +132,24 @@
              print( paste0("Fitting ", modeltypei, " model ", modeli, " with random slope (", randi, ") and outcome ", outcomei) )
              
            ## 
-           # SNP main effect model or not
+           # (1) SNP main effect model or not
              if(SNP_mainOnly){ covarsi <- gsub("snp[*]timefactor_spiro", "snp, timefactor_spiro", covarsi)
                                covarsi <- gsub("snp[*]age",              "snp, age",              covarsi) }
-                 
-           # construct formula for specified SNP or variable
-             if(eqlist$variable[i] == "snp_s"  &  !grepl("^rs", snpi) ){
-                   covarsi <- gsub("snp_s", snpi, covarsi)     # for non-SNP variables                   
-             }else{
-                   covarsi <- gsub("snp", snpi, covarsi)       # for SNPs 
+                         
+           # (2) construct formula for specified SNP or variable
+             if(!grepl("^rs", snpi) && eqlist$variable[i] == "snp_s"){
+                                  covarsi <- gsub("snp_s",  snpi, covarsi)    # for non-SNP variables (base model) in slope models                  
+             }else if(!grepl("^rs", snpi) && modeli==3 ){  
+                                  covarsi <- gsub("snp[*]", "",   covarsi)    # for non-SNP variable (base model) from model 3
+             }else{               covarsi <- gsub("snp",    snpi, covarsi)    # for SNPs 
              }
-           # Remove the interaction with time for slope data: 
+               
+           # (3) Remove interaction terms with time for slope data: 
              if(eqlist$variable[i] == "snp_s"){
-               covars_additional <- gsub("[*]timefactor_spiro", "", covars_additional)
+                 covars_additional <- gsub("[*]timefactor_spiro", "", covars_additional)
              }
-           #  
+             
+           # (4)  
              covarsi <- c(unlist(strsplit(covarsi, split = ", ")), covars_additional) 
              covarsi <- unique(covarsi)
              covarsi <- paste(covarsi, collapse=" + ")       
@@ -158,21 +161,21 @@
            # (A) linear model using slope data (with only 1 observation per individual, no random slope)
            #    (1) 1 observation, independent individuals  (ID=IID, no kmat, no slope)   we cannot use m_group="smoking_status_base" when no kmat
            #    (2) 1 observation, related individuals      (ID=IID, kmat,    no slope)   ????do we need m_group="smoking_status_base"? Default is yes.
-                if(eqlist$variable[i] == "snp_s" & modeltypei == "lm"){  
+                if(eqlist$variable[i] == "snp_s" && modeltypei == "lm"){  
                   
-                   if(is.null(kmat)){ m_groupi <- NULL }else{ m_groupi <- "smoking_status_base" }            
+                   if(is.null(kmat)){ m_groupi <- NULL }#else{ m_groupi <- "smoking_status_base" }            
                    m_tmp <- f_glmmkin(dat_slope_lm, modeli, eqi, rand_s=NULL, m_group=m_groupi, kmati=kmat, modeltypei=modeltypei)
             
-           # For LME, m_group will always be smoking status    
+           # For LME, m_group will always be m_groupi (baseline, time-varying or consistent smoking status)    
            # (B) lme model using slope data (multiple slopes as outcome, no random slope)  
-                 }else if(eqlist$variable[i] == "snp_s" & modeltypei == "glmmkin"){              
-                  m_tmp <- f_glmmkin(dat_slope, modeli, eqi, rand_s=NULL, kmati=kmat, modeltypei=modeltypei)
+                 }else if(eqlist$variable[i] == "snp_s" && modeltypei == "glmmkin"){              
+                  m_tmp <- f_glmmkin(dat_slope, modeli, eqi, rand_s=NULL, m_group=m_groupi, kmati=kmat, modeltypei=modeltypei)
              
            # (C) lme models    
                  }else{     
-                  m_tmp <- f_glmmkin(dat_full, modeli, eqi, rand_s=randi, kmati=kmat, modeltypei=modeltypei)
+                  m_tmp <- f_glmmkin(dat_full, modeli, eqi, rand_s=randi, m_group=m_groupi, kmati=kmat, modeltypei=modeltypei)
                  }
-           ## ------------------------          
+           ## ------------------------       
              
              if(is.null(randi)){ randi <- "NONE"}
              m_tmp         <- cbind(m_tmp, SNP=snpi, randslope=randi, outcome=outcomei)
@@ -184,7 +187,7 @@
         
         }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
        }
-     # ----------------------------  
+     # -----------------------------------  
    
      # whether to save coefficients for all variables
        if(!all_results){ 

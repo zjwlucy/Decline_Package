@@ -28,11 +28,23 @@
 ## 
 ## others: cohort specific covariates
 
-  f_covars <- function(others=NULL,others_inter=NULL,multiRace=FALSE){    
-        # common covariates across cohort & will have interaction terms with time
-          covars_common   <- c("smoking_status", "sex", "smoking_packyears_base", "ht_baseline", "htBaseCenteredSq") 
-          covars_forinter <- c("smoking_status", "sex", "smoking_packyears_base")       # covariates used for interaction with time
-                
+  f_covars <- function(others=NULL,others_inter=NULL,multiRace=FALSE,fixed_smk){
+  
+        # consistent smoking status or time-varying smoking status
+          use_smk <- ifelse(fixed_smk, "smk_status", "smoking_status")
+          
+        # common covariates across cohort & will have interaction terms with time   
+          covars_common   <- c( use_smk, "sex", "smoking_packyears_base", "ht_baseline", "htBaseCenteredSq" ) 
+          covars_forinter <- c( use_smk, "sex", "smoking_packyears_base" )       # covariates used for interaction with time           
+        
+          #if(fixed_smk){ # consistent smoking status:  smk_status
+          #  covars_common   <- c("smk_status", "sex", "smoking_packyears_base", "ht_baseline", "htBaseCenteredSq") 
+          #  covars_forinter <- c("smk_status", "sex", "smoking_packyears_base")       # covariates used for interaction with time             
+          #}else{
+          #  covars_common   <- c("smoking_status", "sex", "smoking_packyears_base", "ht_baseline", "htBaseCenteredSq") 
+          #  covars_forinter <- c("smoking_status", "sex", "smoking_packyears_base")       # covariates used for interaction with time
+          #}
+     
         # if cohort has race variable     
           if(multiRace){   print("Note: Variable race is added")
                            covars_common   <- c(covars_common,   "race")
@@ -45,9 +57,9 @@
         # covariates used for fitting models
           covars_for_eq <- c(covars_common, covars_interWithTime, others)
         
-        # common covariates used for checking data  
-          covars_common <- covars_common[ !(covars_common %in% c("htBaseCenteredSq"))  ]
-          covars_common <- c(covars_common, others, "smoking_status_base")
+        # common covariates used for checking data  & summary
+          covars_common <- covars_common[ !(covars_common %in% c("smk_status", "htBaseCenteredSq"))  ]
+          covars_common <- unique(  c(covars_common, others, "smoking_status", "smoking_status_base") )
         
         #
           rs_want <- c("rs682254",    "rs507211",   "rs10502207", "rs3741240", "rs4304998", "rs8040868",
@@ -55,7 +67,7 @@
                        "rs2070600",   "rs34712979", "rs7733410")
         
         #  
-          covars_list   <- list(covars_for_eq, covars_common, rs_want)
+          covars_list        <- list(covars_for_eq, covars_common, rs_want)
           names(covars_list) <- c("covars_for_eq", "covars_common", "rs_want")
   return(covars_list)     
   }
