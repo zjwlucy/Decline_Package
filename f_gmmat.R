@@ -166,10 +166,22 @@
                    if(is.null(kmat)){ m_groupi <- NULL }#else{ m_groupi <- "smoking_status_base" }            
                    m_tmp <- f_glmmkin(dat_slope_lm, modeli, eqi, rand_s=NULL, m_group=m_groupi, kmati=kmat, modeltypei=modeltypei)
             
+            
            # For LME, m_group will always be m_groupi (baseline, time-varying or consistent smoking status)    
            # (B) lme model using slope data (multiple slopes as outcome, no random slope)  
-                 }else if(eqlist$variable[i] == "snp_s" && modeltypei == "glmmkin"){              
+                 }else if(eqlist$variable[i] == "snp_s" && modeltypei == "glmmkin"){       
+                # check if the slope model is fitted on unrelated individuals with 1 observation
+                  if(is.null(kmat)){
+                       #n_size        <- as.data.frame( table(dat_slope$IID) ) 
+                       #change_groupi <- (sum(n_size$Freq==1) == nrow(n_size)) 
+                       change_groupi <- ( length(unique(dat_slope$IID)) == nrow(dat_slope) ) 
+                       if(change_groupi){
+                          m_groupi <- NULL 
+                          print("WARNING: dataset is not longitudinal, all individuals have only 1 observation")
+                       }
+                  }      
                   m_tmp <- f_glmmkin(dat_slope, modeli, eqi, rand_s=NULL, m_group=m_groupi, kmati=kmat, modeltypei=modeltypei)
+             
              
            # (C) lme models    
                  }else{     
