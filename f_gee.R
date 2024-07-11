@@ -29,6 +29,7 @@
              if(relatedi){   n_size <- as.data.frame( table(dat$FID) )
              }else{          n_size <- as.data.frame( table(dat$IID) )     }
              
+             
            # check if the dataset is still a longitudinal data 
              alleq1     <- sum(n_size$Freq == 1) == nrow(n_size)
              if(alleq1) { print("WARNING: dataset is not longitudinal, all individuals have only 1 observation") }
@@ -39,6 +40,10 @@
              
              if(change_cor){  cor_str <- "ar1";  print("WARNING: observations per individual is <= 3, changing corstr to AR1 for GEE")
              }else{           cor_str <- "unstructured"      }
+            
+            
+           # check if smoking status have levels with 0 observation (GEE cannot run when factors have used levels)
+             if(sum(table(dat$smk_status) > 0) ){ dat$smk_status <- factor(dat$smk_status) }
             
           
            # -----------------------------------------------

@@ -78,9 +78,9 @@
       # kmat group
       #  T    T
       #  F    T
-        if(modeltypei == "lm" && is.null(kmati)){  names(m_gmmat$theta) <- "0" }  # no random & group specific variance estimate
-        vars_info <- data.frame(matrix(vector(), 11, 0,
-                                dimnames=list(c("0", "1", "2", 
+        if(modeltypei == "lm" && is.null(kmati)){  names(m_gmmat$theta) <- "1" }  # no random & group specific variance estimate
+        vars_info <- data.frame(matrix(vector(), 12, 0,
+                                dimnames=list(c("1", "2", "3", "4", 
                                               "kins1.var.intercept", "kins2.var.intercept", 
                                               "kins1.var.slope", "kins2.var.slope",
                                               "kins1.cov.intercept.slope", "kins2.cov.intercept.slope",
@@ -96,7 +96,7 @@
         if(is.null(m_group)){  m_group <- "NONE"  }        
         s           <- cbind(modeltypei, modeli, length(m_gmmat$Y), length(unique(m_gmmat$id_include)), rownames(fixed), fixed, 
                              mafi, as.numeric(timei["sys.self"]), as.numeric(timei["elapsed"]), use_kmat, m_id, m_group, 
-                             data.frame(t(matrix(vars_info$m_gmmat.theta, nrow=11, ncol=nrow(fixed))))  )   
+                             data.frame(t(matrix(vars_info$m_gmmat.theta, nrow=nrow(vars_info), ncol=nrow(fixed))))  )   
         colnames(s) <- c("modeltype", "model", "n_obs", "n_uniq", "variable", "Estimate", "SE", "t", "pvalue", 
                          "MAF", "sys_time", "elapsed_time", "UseKinship", "m_id", "m_group", vars_info$var_name) 
            
