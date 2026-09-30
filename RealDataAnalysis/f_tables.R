@@ -4,7 +4,7 @@
 
 ## ---------------------------------------------------------------
 ## Table 1: Characteristics of study participants
-# Columns: characteristic, study name 1, study name 2…..
+# Columns: characteristic, study name 1, study name 2â€¦..
 
 # Rows:  n (observations), age, sex, race, height, pack years, smoking status , FEV1/FVC, FEV1 % predicted, FEV1, number of observations (total [ min, max]).  
 
