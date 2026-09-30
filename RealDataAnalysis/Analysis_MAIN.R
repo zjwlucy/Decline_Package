@@ -3,7 +3,6 @@
 ##############################################################  
 ## ------------------------------------------------------------ 
 ## data
-## https://docs.google.com/document/d/1ecNAiYQG7C4lmPHUhkvw3B1MMH9wfZikHFWfLRQGKtw/edit#
 ## covariates:
 
 ## IID:                    Unique individual ID (numeric). Note: two different individuals CANNOT have the same IID
