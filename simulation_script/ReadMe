@@ -1,1 +1,4 @@
 Example R script used for simulating data
+
+1. Run the script create_example_data.R for simulating new dataset
+2. One example of simulated nonlinear decline based on fake data is d_nonL_1.Rdata 
