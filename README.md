@@ -75,7 +75,7 @@ Both versions should give the SAME output
    * ggplot2_3.3.2
    * kinship2 (optional) 
 
-## 5. For analysis, use "Analysis_MAIN.R"
+## 5. For analysis, use "RealDataAnalysis/Analysis_MAIN.R"
 Example code is included inside Analysis_MAIN.R as comments. Please make sure your dataset has all the columns that are mentioned in **section 2. Columns for data set**.  
 
 Example data: 
